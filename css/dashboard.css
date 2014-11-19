@@ -30,7 +30,7 @@ header {
     opacity: 1;
   }
 }
-header, main {
+header, main, .add-schedule {
   -webkit-animation: fadein 2s;
           animation: fadein 2s;
 }
@@ -126,7 +126,11 @@ pre.json-display {
   box-shadow: inset 0 1px 1px 1px rgba(0, 0, 0, .5);
   font-style: italic;
 }
-.add-schedule-loader .ai-indicator {
+.button-loader .ai-indicator {
   margin-left: auto;
   margin-right: auto;
+}
+.version-changes-list {
+  height: 153px;
+  overflow-y: scroll;
 }
