@@ -1,0 +1,241 @@
+<!doctype html>
+<html ng-app="dashboard">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>SchedU Dashboard</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="shortcut" href="favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="img/favicon-152.png">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+
+  <script src="lib/js/angular.min.js"></script>
+  <script src="lib/js/underscore.min.js"></script>
+  <script src="lib/js/pouchdb.min.js"></script>
+  <script src="lib/js/Chart.min.js"></script>
+  <script src="lib/js/moment.min.js"></script>
+  <script src="lib/js/tc-angular-chartjs.min.js"></script>
+  <script src="lib/js/ngActivityIndicator.min.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+
+  <link rel="stylesheet" href="lib/css/normalize.css">
+  <link rel="stylesheet" href="lib/css/ngActivityIndicator.min.css">
+  <link rel="stylesheet" href="lib/css/basscss.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body ng-controller="DashboardCtrl">
+  <header class="fit center py4">
+    <img src="img/logo-white.svg">
+  </header>
+  <div class="page-load-indicator" ng-activity-indicator="CircledDark"></div>
+  <main ng-hide="AILoading">
+    <div class="container clearfix">
+      <div class="col-12 center">
+        <h1 class="caps" ng-class="{red: !scheduleString}">
+          <span ng-hide="scheduleString">No</span>
+          Schedule
+        </h1>
+        <h2 ng-show="scheduleString">{{scheduleString}}</h2>
+        <ol class="list-reset ml4 mx-auto">
+          <period-block ng-repeat="period in scheduleObject.periodOrder" period="period"></period-block>
+        </ol>
+      </div>
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
+        <h1 class="center caps">Users</h1>
+        <canvas class="py2" tc-chartjs chart-type="pie" chart-data="charts.userGrades.data" chart-options="charts.userGrades.options"></canvas>
+        <table class="table-light clearfix">
+          <tr class="center bg-light-gray">
+            <td>Users</td>
+            <td>Grade</td>
+          </tr>
+          <tr ng-repeat="grade in charts.userGrades.data | orderBy:'value':true"
+              ng-style="{'background-color':grade.highlight}">
+            <td>{{grade.value}}</td>
+            <td>{{grade.label}}</td>
+          </tr>
+          <tr class="bg-darken-1">
+            <td>{{userCount.total}}</td>
+            <td>total</td>
+          </tr>
+        </table>
+      </div>
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
+        <h1 class="center caps">Feedback</h1>
+        <canvas tc-chartjs-bar chart-options="charts.feedbackItems.options" chart-data="charts.feedbackItems.data" auto-legend></canvas>
+        <table class="table-light clearfix left">
+          <tr class="center bg-light-gray">
+            <td>#</td>
+            <td>Votes</td>
+            <td>Description</td>
+          </tr>
+          <tr ng-repeat="feedbackItem in feedbackItems">
+            <td>{{$index + 1}}</td>
+            <td>{{feedbackItem.votes}}</td>
+            <td>{{feedbackItem.name}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="container clearfix" ng-show="globals.addScheduleOn" ng-init="globals.addScheduleOn = false">
+      <div class="col-12" ng-controller="AddScheduleCtrl">
+        <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2" ng-submit="submit()">
+          <h1>Add to Schedule</h1>
+          <label>
+            Day Type
+            <select class="block full-width field-light" ng-model="addSchedule.dayType">
+              <option value="normal">Normal</option>
+              <option value="activityperiod">Activity Period</option>
+              <option value="holiday">Holiday</option>
+              <option value="earlyrelease">Early Release</option>
+              <option value="earlyactivity">Early Release Activity Period</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+          <label>
+            Date
+            <input type="text"
+                   class="block full-width field-light"
+                   placeholder="mm-dd-yy"
+                   ng-model="addSchedule.date">
+          </label>
+          <label ng-show="addSchedule.dayType != 'holiday'">
+            Day Number
+            <input type="number"
+                   class="block full-width field-light"
+                   placeholder="1-8"
+                   min="1"
+                   max="8"
+                   ng-attr-required="{{addSchedule.dayType != 'holiday'}}"
+                   ng-model="addSchedule.dayNumber">
+          </label>
+          <label ng-show="addSchedule.dayType == 'normal' || addSchedule.dayType == 'activityperiod'">
+            First Period
+            <input type="text"
+                   class="block full-width field-light"
+                   placeholder="a"
+                   ng-model="addSchedule.firstPeriod">
+          </label>
+          <label ng-show="addSchedule.dayType == 'holiday'">
+            Holiday Name
+            <input type="text" class="block full-width field-light" placeholder="Holiday Name" ng-model="addSchedule.holidayName">
+          </label>
+          <div ng-show="addSchedule.dayType == 'earlyrelease' || addSchedule.dayType == 'custom' || addSchedule.dayType == 'earlyactivity'">
+            <label>Fill in as many periods as there are in the day.</label>
+            <input type="text"
+                   class="block full-width field-light"
+                   placeholder="Period Name"
+                   ng-model="addSchedule.periods[num]"
+                   ng-repeat="num in [1,2,3,4,5,6,7,8]">
+          </div>
+
+          <button type="submit"
+                  class="button button-green-outline full-width"
+                  ng-disabled="loading">
+            <div class="add-schedule-loader"
+                 ng-show="loading"
+                 ng-activity-indicator="DottedWhite"
+                 skip-ng-show="yes">
+            </div>
+            <span ng-show="!loading">Add to schedule</span>
+          </button>
+        </form>
+        <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="lastSchedule">
+          <h1>Schedule Preview</h1>
+          <pre class="json-display">{{schedule | json}}</pre>
+        </div>
+      </div>
+    </div>
+    <div class="container clearfix" ng-controller="ScheduleCtrl">
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6">
+        <h1 class="inline-block">Schedules</h1>
+        <button class="button button-green-outline inline-block ml4"
+                ng-class="{'is-active': globals.addScheduleOn}"
+                ng-click="globals.addScheduleOn = !globals.addScheduleOn">
+          Add Schedule
+        </button>
+        <br>
+        <ul class="doc-list list-reset mr2">
+          <li class="doc button block"
+              ng-repeat="schedule in allSchedules"
+              ng-init="$parent.currentScheduleId = allSchedules[0]._id"
+              ng-class="{'is-selected': $parent.currentScheduleId == schedule._id}"
+              ng-click="$parent.currentScheduleId = schedule._id">
+            {{schedule._id}}
+            <span ng-show="schedule.special">: {{schedule.special}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6">
+        <h1>Selected Day</h1>
+        <pre class="json-display">{{currentSchedule | json}}</pre>
+      </div>
+    </div>
+    <div class="container clearfix" ng-controller="UserCtrl">
+      <div class="sm-col sm-col-6 md-col-6 lg-col-6">
+        <h1>Users</h1>
+        <ul class="doc-list list-reset mr2">
+          <li class="doc button block"
+              ng-repeat="user in allUsers | orderBy:'firstName'"
+              ng-init="$parent.currentUserId = '508-688-4042'"
+              ng-class="{'is-selected': $parent.currentUserId == user._id}"
+              ng-click="$parent.currentUserId = user._id">
+              {{user.firstName}} {{user.lastName}}
+          </li>
+        </ul>
+      </div>
+      <div class="sm-col sm-col-6 md-col-6 lg-col-6">
+        <h1>Selected User</h1>
+        <pre class="json-display">{{currentUser | json}}</pre>
+      </div>
+    </div>
+    <div class="container clearfix">
+      <div class="col-12" ng-controller="VersionsCtrl">
+        <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2" ng-submit="submit()">
+          <h1>Version Tracker</h1>
+          <label>
+            Version Number
+            <input class="block full-width field-light"
+                   type="text"
+                   ng-model="currentVersion.versionNumber">
+          </label>
+          <label>
+            Date
+            <input class="block full-width field-light"
+                   type="text"
+                   ng-model="currentVersion.date">
+          </label>
+          <div ng-repeat="change in currentVersion.changes">
+            <label ng-show="currentVersion.changes">
+              {{$index + 1}}
+              <input class="block full-width field-light"
+                     type="text"
+                     id="change-{{$index + 1}}"
+                     ng-model="change">
+            </label>
+          </div>
+          <div>
+            <label>
+              New Change
+              <input class="block full-width field-light"
+                     type="text"
+                     id="newChange"
+                     ng-model="newChange">
+            </label>
+          </div>
+          <button class="right block button-green-outline" type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="currentVersion">
+        <h1>Current Version</h1>
+        <pre class="json-display">{{version | json}}</pre>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
