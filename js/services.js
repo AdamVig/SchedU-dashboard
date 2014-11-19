@@ -184,16 +184,16 @@ angular.module("dashboard.services", [])
   };
 
   /**
-   * Add new version to versions database
+   * Update version in versions database
    * @param {version object} version Version object containing _id, _rev,
    *                                 date (string, MM-DD-YY), and changes (array)
    * @return {object}                Data and error from request
    */
-  this.addVersion = function (version) {
+  this.updateVersion = function (version) {
     // Setup promise
     var request = $q.defer();
 
-    versionsDb.put(version, versions._id, function (error, data) {
+    versionsDb.put(version, version._id, version._rev, function (error, data) {
 
       if (error == null) {
         error = false;
