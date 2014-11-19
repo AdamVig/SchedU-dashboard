@@ -1,0 +1,4 @@
+Authtype Basic
+AuthName "Put whatever you want here"
+AuthUserFile /fs1c/getschedu/protected/.htpasswd
+Require valid-user
