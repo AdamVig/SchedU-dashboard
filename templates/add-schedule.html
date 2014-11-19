@@ -1,0 +1,67 @@
+<div class="col-12" ng-controller="AddScheduleCtrl">
+  <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2" ng-submit="submit()">
+    <h1>Add to Schedule</h1>
+    <label>
+      Day Type
+      <select class="block full-width field-light" ng-model="addSchedule.dayType">
+        <option value="normal">Normal</option>
+        <option value="activityperiod">Activity Period</option>
+        <option value="holiday">Holiday</option>
+        <option value="earlyrelease">Early Release</option>
+        <option value="earlyactivity">Early Release Activity Period</option>
+        <option value="custom">Custom</option>
+      </select>
+    </label>
+    <label>
+      Date
+      <input type="text"
+             class="block full-width field-light"
+             placeholder="mm-dd-yy"
+             ng-model="addSchedule.date">
+    </label>
+    <label ng-show="addSchedule.dayType != 'holiday'">
+      Day Number
+      <input type="number"
+             class="block full-width field-light"
+             placeholder="1-8"
+             min="1"
+             max="8"
+             ng-attr-required="{{addSchedule.dayType != 'holiday'}}"
+             ng-model="addSchedule.dayNumber">
+    </label>
+    <label ng-show="addSchedule.dayType == 'normal' || addSchedule.dayType == 'activityperiod'">
+      First Period
+      <input type="text"
+             class="block full-width field-light"
+             placeholder="a"
+             ng-model="addSchedule.firstPeriod">
+    </label>
+    <label ng-show="addSchedule.dayType == 'holiday'">
+      Holiday Name
+      <input type="text" class="block full-width field-light" placeholder="Holiday Name" ng-model="addSchedule.holidayName">
+    </label>
+    <div ng-show="addSchedule.dayType == 'earlyrelease' || addSchedule.dayType == 'custom' || addSchedule.dayType == 'earlyactivity'">
+      <label>Fill in as many periods as there are in the day.</label>
+      <input type="text"
+             class="block full-width field-light"
+             placeholder="Period Name"
+             ng-model="addSchedule.periods[num]"
+             ng-repeat="num in [1,2,3,4,5,6,7,8]">
+    </div>
+
+    <button type="submit"
+            class="button button-green-outline full-width"
+            ng-disabled="loading">
+      <div class="add-schedule-loader"
+           ng-show="loading"
+           ng-activity-indicator="DottedWhite"
+           skip-ng-show="yes">
+      </div>
+      <span ng-show="!loading">Add to schedule</span>
+    </button>
+  </form>
+  <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="lastSchedule">
+    <h1>Schedule Preview</h1>
+    <pre class="json-display">{{schedule | json}}</pre>
+  </div>
+</div>
