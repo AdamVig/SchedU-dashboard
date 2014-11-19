@@ -52,7 +52,7 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
 
   // Get all versions and latest version
   }).then(function (response) {
-    $scope.versions = $filter('orderBy')(response.data, '_id', 'reverse');
+    $scope.versions = $filter('orderBy')(response.data, 'versionNumber', 'reverse');
     $scope.currentVersion = $scope.versions[0];
 
   }).finally(function (response) {
@@ -115,9 +115,35 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
 })
 
 .controller("VersionsCtrl", function ($scope) {
-  $scope.currentVersionId = "";
-  $scope.$watch("currentVersionId", function (currentVersionId) {
-    $scope.currentVersion = _.findWhere($scope.versions, {'_id': currentVersionId} );
+  $scope.currentVersionNumber = "";
+  $scope.$watch("currentVersionNumber", function (currentVersionNumber) {
+    $scope.currentVersion = _.findWhere($scope.versions, {'versionNumber': currentVersionNumber} );
   });
+
+})
+
+.controller("EditVersionCtrl", function ($scope, DataService) {
+  $scope.submit = function () {
+    
+    $scope.loading = true;
+
+    // Add new change to changes array if it exists
+    if ($scope.newChange) {
+      $scope.currentVersion.changes.push({"value": $scope.newChange});
+      $scope.newChange = "";
+    }
+
+    // Remove all empty values
+    $scope.currentVersion.changes = _.filter($scope.currentVersion.changes, function (change) { return change.value; });
+
+    // Remove pesky $$hashKeys caused by ng-repeat
+    var version = angular.copy($scope.currentVersion);
+
+    // Update version in database
+    DataService.updateVersion(version).then(function (response) {
+      $scope.currentVersion._rev = response.data.rev;
+      $scope.loading = false;
+    });
+  };
 });
 

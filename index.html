@@ -18,7 +18,7 @@
   <script src="lib/js/moment.min.js"></script>
   <script src="lib/js/tc-angular-chartjs.min.js"></script>
   <script src="lib/js/ngActivityIndicator.min.js"></script>
-  
+
   <script src="js/dashboard.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/services.js"></script>
@@ -130,13 +130,19 @@
       </div>
     </div>
     <div class="container clearfix" ng-controller="VersionsCtrl">
-      <div class="col-12">
-        
+      <div class="sm-col sm-col-6 md-col-6 lg-col-6">
+        <h1>Users</h1>
+        <ul class="doc-list list-reset mr2">
+          <li class="doc button block"
+              ng-repeat="version in versions"
+              ng-init="$parent.currentVersionNumber = versions[0].versionNumber"
+              ng-class="{'is-selected': $parent.currentVersionNumber == version.versionNumber}"
+              ng-click="$parent.currentVersionNumber = version.versionNumber">
+              {{version.versionNumber}}
+          </li>
+        </ul>
       </div>
-      <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="currentVersion">
-        <h1>Current Version</h1>
-        <pre class="json-display">{{version | json}}</pre>
-      </div>
+      <ng-include src="'templates/edit-version.html'"></ng-include>
     </div>
   </main>
 </body>
