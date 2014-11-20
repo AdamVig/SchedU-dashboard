@@ -184,8 +184,54 @@ angular.module("dashboard.services", [])
   };
 
   /**
+   * Retrieve schedule for date from database
+   * @param  {string} versionId ID of version doc
+   * @return {version object}  Version object containing _id, _rev, versionNumber,
+   *                            date (string, MM-DD-YY), and changes (array)
+   */
+  this.getVersion = function (versionId) {
+    // Setup promise
+    var request = $q.defer();
+
+    versionsDb.get(versionId, function (error, data) {
+
+      if (error == null) {
+        error = false;
+      }
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
+    });
+
+    return request.promise;
+  };
+
+  /**
+   * Add version to versions database
+   * @param {version object} version Version object containing versionNumber,
+   *                                 date (string, MM-DD-YY), and changes (array)
+   * @return {object}                Data and error from request
+   */
+  this.addVersion = function (version) {
+    // Setup promise
+    var request = $q.defer();
+
+    versionsDb.post(version, function (error, data) {
+
+      if (error == null) {
+        error = false;
+      }
+
+      // Resolve promise
+      request.resolve({"data": data, "error": error});
+    });
+
+    return request.promise;
+  };
+
+  /**
    * Update version in versions database
-   * @param {version object} version Version object containing _id, _rev,
+   * @param {version object} version Version object containing _id, _rev, versionNumber,
    *                                 date (string, MM-DD-YY), and changes (array)
    * @return {object}                Data and error from request
    */
