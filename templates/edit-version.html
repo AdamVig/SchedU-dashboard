@@ -24,14 +24,5 @@
          type="text"
          id="newChange"
          ng-model="newChange">
-  <button type="submit"
-          class="button button-green-outline full-width"
-          ng-disabled="loading">
-    <div class="button-loader"
-         ng-show="loading"
-         ng-activity-indicator="DottedWhite"
-         skip-ng-show="yes">
-    </div>
-    <span ng-show="!loading">Update version</span>
-  </button>
+  <submit-button text="Update version" classes="full-width"></submit-button>
 </form>

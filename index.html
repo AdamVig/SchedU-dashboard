@@ -140,6 +140,15 @@
               ng-click="$parent.currentVersionNumber = version.versionNumber">
               {{version.versionNumber}}
           </li>
+          <li class="doc block">
+            <form ng-submit="addVersion()">
+              <input class="field-light ml1"
+                     type="text"
+                     placeholder="New Version Number"
+                     ng-model="newVersionNumber">
+              <submit-button text="Add version" classes=""></submit-button>
+            </form>
+          </li>
         </ul>
       </div>
       <ng-include src="'templates/edit-version.html'"></ng-include>

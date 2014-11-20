@@ -49,17 +49,7 @@
              ng-model="addSchedule.periods[num]"
              ng-repeat="num in [1,2,3,4,5,6,7,8]">
     </div>
-
-    <button type="submit"
-            class="button button-green-outline full-width"
-            ng-disabled="loading">
-      <div class="button-loader"
-           ng-show="loading"
-           ng-activity-indicator="DottedWhite"
-           skip-ng-show="yes">
-      </div>
-      <span ng-show="!loading">Add to schedule</span>
-    </button>
+    <submit-button text="Add schedule" classes="full-width"></submit-button>
   </form>
   <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="lastSchedule">
     <h1>Schedule Preview</h1>
