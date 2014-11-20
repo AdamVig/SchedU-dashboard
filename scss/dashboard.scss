@@ -1,0 +1,104 @@
+$schedu-green: #215732;
+$schedu-green-half-opacity: rgba(33, 87, 50, 0.5);
+$darker-gray: #aaa;
+$light-gray: #c8c9c7;
+$lighter-gray: #eee;
+
+body {
+  background-color: $lighter-gray;
+  padding-bottom: 100px;
+}
+.page-load-indicator .ai-dark-spin {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  border-width: 7px;
+  border-color: $schedu-green-half-opacity $schedu-green-half-opacity $schedu-green $schedu-green;
+}
+header {
+  background-color: $schedu-green;
+}
+@import 'period-blocks';
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+header, main, .add-schedule {
+  -webkit-animation: fadein 2s;
+          animation: fadein 2s;
+}
+
+.panel {
+  height: 390px;
+  background-color: $light-gray;
+  border: 1px solid $darker-gray;
+  border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+pre.json-display {
+  @extend .panel;
+  height: 360px;
+  padding: 15px;
+}
+.field-light:invalid {
+  border-color: #ccc;
+}
+.field-light.ng-dirty:invalid {
+  border-color: #f95020;
+}
+.doc.is-selected,
+.doc.is-selected a.button {
+  color: #fff;
+  background-color: $schedu-green;
+}
+.button-green-outline {
+  line-height: 1;
+  color: $schedu-green;
+  background-color: transparent;
+  border-radius: 3px;
+  border: 2px solid $schedu-green;
+  transition-duration: .1s;
+  transition-timing-function: ease-out;
+  transition-property: box-shadow, background-color;
+}
+.button-green-outline:hover,
+.button-green-outline.is-active {
+  color: white;
+  background-color: $schedu-green;
+}
+.button-green-outline:disabled,
+.button-green-outline.is-disabled {
+  color: white;
+  background-color: $schedu-green;
+  opacity: .75;
+}
+.button-green-outline:focus {
+  outline: none;
+}
+.button-green-outline:active {
+  box-shadow: inset 0 1px 1px 1px rgba(0, 0, 0, .5);
+  font-style: italic;
+}
+.button-loader .ai-indicator {
+  margin-left: auto;
+  margin-right: auto;
+}
+.version-changes-list {
+  height: 153px;
+  overflow-y: scroll;
+}
