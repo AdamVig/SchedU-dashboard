@@ -20,7 +20,7 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
 .directive("periodBlock", function () {
 
   return {
-    restrict: 'EA', // Can only be called by element and attribute name,
+    restrict: 'EA', // Can only be called by element and attribute name
     scope: {
       period: '='
     },
@@ -35,6 +35,20 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
     template: '<li class="period-block inline-block center {{period | lowercase}}-period">{{period}}</li>'
   };
 })
+
+.directive("submitButton", function () {
+
+  return {
+    restrict: 'E', // Can only be called by element name
+    scope: {
+      text: '@text',
+      classes: '@classes'
+    },
+    replace: true,
+    templateUrl: 'templates/submit-button.html'
+  };
+})
+
 
 .filter('titleCase', function() {
   return function(s) {
