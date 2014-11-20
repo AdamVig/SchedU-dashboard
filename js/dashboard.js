@@ -32,17 +32,17 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
         scope.period = "Sp"; // Special
       }
     },
-    template: '<li class="period-block {{period | lowercase}}-period">{{period}}</li>'
+    template: '<li class="period-block inline-block center {{period | lowercase}}-period">{{period}}</li>'
   };
 })
 
 .filter('titleCase', function() {
-    return function(s) {
-        s = ( s === undefined || s === null ) ? '' : s;
-        return s.toString().toLowerCase().replace( /\b([a-z])/g, function(ch) {
-            return ch.toUpperCase();
-        });
-    };
+  return function(s) {
+    s = ( s === undefined || s === null ) ? '' : s;
+    return s.toString().toLowerCase().replace( /\b([a-z])/g, function(ch) {
+        return ch.toUpperCase();
+    });
+  };
 })
 
 .filter('date', function () {
@@ -53,7 +53,6 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
 
     var formattedDate = date;
 
-    // # (###) ###-#### as c (area) front-end
     var month = date.substring(0,2);
     var day = date.substring(2, 4);
     var year = date.substring(4, 6);
