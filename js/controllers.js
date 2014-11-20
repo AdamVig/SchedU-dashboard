@@ -45,7 +45,9 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     $scope.feedbackItems = ParseService.sortFeedbackItems($scope.feedbackItems);
     $scope.charts.feedbackItems = {
       "data": ChartDataService.parseFeedback($scope.feedbackItems),
-      "options": {}
+      "options": {
+        "legendTemplate": ""
+      }
     };
 
     return DataService.getVersions();
