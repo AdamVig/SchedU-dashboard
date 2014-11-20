@@ -46,7 +46,7 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     $scope.charts.feedbackItems = {
       "data": ChartDataService.parseFeedback($scope.feedbackItems),
       "options": {
-        "legendTemplate": ""
+        "legendTemplate": '<ul class="tc-chart-js-legend display-none"></ul>'
       }
     };
 
@@ -116,11 +116,36 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
   });
 })
 
-.controller("VersionsCtrl", function ($scope) {
+.controller("VersionsCtrl", function ($scope, DataService) {
   $scope.currentVersionNumber = "";
   $scope.$watch("currentVersionNumber", function (currentVersionNumber) {
     $scope.currentVersion = _.findWhere($scope.versions, {'versionNumber': currentVersionNumber} );
   });
+
+  $scope.addVersion = function () {
+    $scope.loading = true;
+
+    var version = {
+      "versionNumber": $scope.newVersionNumber,
+      "date": "",
+      "changes": []
+    };
+
+    DataService.addVersion(version).then(function (response) {
+
+      return DataService.getVersion(response.data.id);
+
+    }).then(function (response) {
+
+      // Add new version to scope
+      $scope.versions.unshift(response.data);
+
+      // Reset values
+      $scope.newVersionNumber = "";
+      $scope.loading = false;
+
+    });
+  };
 
 })
 
