@@ -393,18 +393,24 @@ angular.module("dashboard.services", [])
    *                          freshmen, and teachers
    */
   this.countUsers = function (allUsers) {
+
+    var testUsers = _.where(allUsers, {"test": true});
+
     var userCount = {
-      "total": allUsers.length,
+      "total": allUsers.length - testUsers.length,
       "12": 0,
       "11": 0,
       "10": 0,
       "9": 0,
+      "test": 0,
       "teacher": 0
     };
 
     _.each(allUsers, function (user) {
-      if (user.grade) {
+      if (user.grade && user.test !== true) {
         userCount[user.grade.toString()]++;
+      } else if (user.test == true) {
+        userCount.test++;
       }
     });
     return userCount;
@@ -502,6 +508,12 @@ angular.module("dashboard.services", [])
         'color': 'hsla(145, 63%, 49%, 1)',
         'highlight': 'hsla(145, 63%, 49%, 0.75)',
         'label': 'teachers'
+      },
+      {
+        'value': userCount['test'],
+        'color': 'hsla(28, 80%, 52%, 1.0)',
+        'highlight': 'hsla(28, 80%, 52%, 0.75)',
+        'label': 'test'
       }
 
     ];
@@ -531,7 +543,7 @@ angular.module("dashboard.services", [])
     var data = {
       'labels': labels,
       'datasets': [{
-        'fillColor': '#085102',
+        'fillColor': 'hsla(115, 95%, 16%, 1)',
         'data': votes
       }]
     };
