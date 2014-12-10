@@ -1,4 +1,4 @@
 Authtype Basic
-AuthName "Put whatever you want here"
+AuthName "Authenticate to access the SchedU Dashboard."
 AuthUserFile /fs1c/getschedu/protected/.htpasswd
 Require valid-user
