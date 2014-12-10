@@ -1,6 +1,6 @@
 angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
 
-.constant("dbUrl", "https://schedu:G3tSch3dU@schedu.cloudant.com/")
+.constant("dbUrl", "https://orgalaskelldintystarlinu:akEwnCIxXqksQdC8CqsyiSR2@schedu.cloudant.com/")
 
 .constant("dayLetterColors", {
   "A": "#D362E8",
@@ -60,7 +60,7 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
 })
 
 .filter('date', function () {
-      
+
   return function (date) {
 
     if (!date) return '';
@@ -72,7 +72,7 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
     var year = date.substring(4, 6);
 
     if (day) {
-      formattedDate = month + "-" + day;  
+      formattedDate = month + "-" + day;
     }
     if (year) {
       formattedDate += "-" + year;
