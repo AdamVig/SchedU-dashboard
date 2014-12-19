@@ -1,6 +1,6 @@
 angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
 
-.controller("DashboardCtrl", function ($scope, $filter, $activityIndicator, DataService, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
+.controller("DashboardCtrl", ['$scope', '$filter', '$activityIndicator', 'DataService', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
 
   var date = DateFactory.currentDay();
   var dateString = date.format("MM-DD-YY");
@@ -61,9 +61,9 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     // Hide loader
     $activityIndicator.stopAnimating();
   });
-})
+}])
 
-.controller("AddScheduleCtrl", function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {
+.controller("AddScheduleCtrl", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {
 
   // Set default value
   $scope.addSchedule = {};
@@ -88,7 +88,7 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
   });
 
   $scope.submit = function () {
-    
+
     $scope.loading = true;
 
     DataService.addSchedule($scope.schedule).then(function (response) {
@@ -100,23 +100,23 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     $scope.addSchedule = {};
     $scope.addSchedule.dayType = "normal";
   };
-})
+}])
 
-.controller("ScheduleCtrl", function ($scope) {
+.controller("ScheduleCtrl", ['$scope', function ($scope) {
   $scope.currentScheduleId = "";
   $scope.$watch("currentScheduleId", function (currentScheduleId) {
     $scope.currentSchedule = _.findWhere($scope.$parent.allSchedules, {'_id': currentScheduleId} );
   });
-})
+}])
 
-.controller("UserCtrl", function ($scope) {
+.controller("UserCtrl", ['$scope', function ($scope) {
   $scope.currentUserId = "";
   $scope.$watch("currentUserId", function (currentUserId) {
     $scope.currentUser = _.findWhere($scope.$parent.allUsers, {'_id': currentUserId} );
   });
-})
+}])
 
-.controller("VersionsCtrl", function ($scope, DataService) {
+.controller("VersionsCtrl", ['$scope', 'DataService', function ($scope, DataService) {
   $scope.currentVersionNumber = "";
   $scope.$watch("currentVersionNumber", function (currentVersionNumber) {
     $scope.currentVersion = _.findWhere($scope.versions, {'versionNumber': currentVersionNumber} );
@@ -147,11 +147,11 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     });
   };
 
-})
+}])
 
-.controller("EditVersionCtrl", function ($scope, DataService) {
+.controller("EditVersionCtrl", ['$scope', 'DataService', function ($scope, DataService) {
   $scope.submit = function () {
-    
+
     $scope.loading = true;
 
     // Add new change to changes array if it exists
@@ -172,5 +172,4 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
       $scope.loading = false;
     });
   };
-});
-
+}]);

@@ -17,7 +17,7 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
   "a", "b", "c", "d", "e", "f", "g"
 ])
 
-.directive("periodBlock", function () {
+.directive("periodBlock", [function () {
 
   return {
     restrict: 'EA', // Can only be called by element and attribute name
@@ -34,9 +34,9 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
     },
     template: '<li class="period-block inline-block center {{period | lowercase}}-period">{{period}}</li>'
   };
-})
+}])
 
-.directive("submitButton", function () {
+.directive("submitButton", [function () {
 
   return {
     restrict: 'E', // Can only be called by element name
@@ -47,19 +47,19 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
     replace: true,
     templateUrl: 'templates/submit-button.html'
   };
-})
+}])
 
 
-.filter('titleCase', function() {
+.filter('titleCase', [function() {
   return function(s) {
     s = ( s === undefined || s === null ) ? '' : s;
     return s.toString().toLowerCase().replace( /\b([a-z])/g, function(ch) {
         return ch.toUpperCase();
     });
   };
-})
+}])
 
-.filter('date', function () {
+.filter('date', [function () {
 
   return function (date) {
 
@@ -80,4 +80,4 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
 
     return formattedDate;
   };
-});
+}]);

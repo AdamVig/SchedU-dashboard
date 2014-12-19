@@ -1,6 +1,6 @@
 angular.module("dashboard.services", [])
 
-.service("DataService", function ($q, dbUrl, ParseService) {
+.service("DataService", ['$q', 'dbUrl', 'ParseService', function ($q, dbUrl, ParseService) {
 
   // Create database objects
   var userDb = new PouchDB(dbUrl + "user");
@@ -14,7 +14,7 @@ angular.module("dashboard.services", [])
    *                 each feedback item object contains _id, name, and votes
    */
   this.getFeedbackItems = function () {
-    
+
     // Setup promise
     var request = $q.defer();
 
@@ -41,7 +41,7 @@ angular.module("dashboard.services", [])
    *                          and number of votes left
    */
   this.addFieldToUsers = function (field) {
-    
+
     // Setup promise
     var request = $q.defer();
 
@@ -52,7 +52,7 @@ angular.module("dashboard.services", [])
       }
 
       _.each(data.docs, function (metaDoc) {
-        
+
       });
 
       // Resolve promise
@@ -90,7 +90,7 @@ angular.module("dashboard.services", [])
   /**
    * Retrieve list of all schedule objects from database
    * @return {array} Array of schedule objects containing _id, _rev,
-   *                 periodOrder (array), dayNumber (int, 1-8) and 
+   *                 periodOrder (array), dayNumber (int, 1-8) and
    *                 special (string or false), and maybe holiday (string)
    */
   this.getAllSchedules = function () {
@@ -252,12 +252,12 @@ angular.module("dashboard.services", [])
     return request.promise;
   };
 
-})
+}])
 
-.service("ParseService", function ($filter) {
+.service("ParseService", ['$filter', function ($filter) {
 
   /**
-   * Parses schedule object into A1 notation using the first period from 
+   * Parses schedule object into A1 notation using the first period from
    * periodOrder and the day number. False if first period is more than one
    * letter long or if period order doesn't exist.
    * @param  {object} scheduleObject Schedule object containing periodOrder,
@@ -389,7 +389,7 @@ angular.module("dashboard.services", [])
    * @param  {array} allUsers Array of user objects containing _id, firstName, lastName,
    *                          phoneNumber, grade, and feedback; which contains voteItems
    *                          and number of votes left
-   * @return {object}         Object containing total, seniors, juniors, sophomores, 
+   * @return {object}         Object containing total, seniors, juniors, sophomores,
    *                          freshmen, and teachers
    */
   this.countUsers = function (allUsers) {
@@ -422,7 +422,7 @@ angular.module("dashboard.services", [])
    *                            phoneNumber, grade, and feedback; which contains voteItems
    *                            and number of votes left
    * @param  {object} feedbackItems Object with keys being the _id of each feedback item;
-   *                                each feedback item object contains _id, name, and votes 
+   *                                each feedback item object contains _id, name, and votes
    * @return {feedbackItemsArray}   Object with keys being the _id of each feedback item;
    *                                each feedback item object contains _id, name, and votes,
    *                                DIFFERENT FROM INPUT because each votes key has a value
@@ -465,13 +465,13 @@ angular.module("dashboard.services", [])
     return date;
   };
 
-})
+}])
 
-.service('ChartDataService', function () {
-  
+.service('ChartDataService', [function () {
+
   /**
    * Create pie chart data array from user grades
-   * @param  {object} userCount Object containing total, seniors, juniors, sophomores, 
+   * @param  {object} userCount Object containing total, seniors, juniors, sophomores,
    *                            freshmen, and teachers
    * @return {array}            List of objects each containing value, color, highlight,
    *                            and label
@@ -537,7 +537,7 @@ angular.module("dashboard.services", [])
 
       labels.push(index + 1);
       votes.push(feedbackItem.votes);
-      
+
     });
 
     var data = {
@@ -550,9 +550,9 @@ angular.module("dashboard.services", [])
 
     return data;
   };
-})
+}])
 
-.factory('ScheduleFactory', function (dayLetters, $filter) {
+.factory('ScheduleFactory', ['dayLetters', '$filter', function (dayLetters, $filter) {
 
   /**
    * Make period order based on first period letter and day type
@@ -630,7 +630,7 @@ angular.module("dashboard.services", [])
       // If period order exists in form data
       // (early release, custom, early release activity period):
       // 1. Remove null values from period order
-      // 2. Convert single letters to lowercase and 
+      // 2. Convert single letters to lowercase and
       //    special period names to title case
       } else if (addScheduleForm.periods) {
 
@@ -658,9 +658,9 @@ angular.module("dashboard.services", [])
       return schedule;
     }
   }
-})
+}])
 
-.factory('OrderSchedulesFactory', function () {
+.factory('OrderSchedulesFactory', [function () {
 
   return function (schedule) {
 
@@ -677,13 +677,13 @@ angular.module("dashboard.services", [])
     return dateSum;
 
   };
-})
+}])
 
-.factory('DateFactory', function () {
+.factory('DateFactory', [function () {
   return {
 
     /**
-     * Gets today's date if not weekend, next 
+     * Gets today's date if not weekend, next
      * Monday's date if weekend
      * @return {moment object} Moment() of the current day's date
      */
@@ -703,7 +703,7 @@ angular.module("dashboard.services", [])
      * Format date into weekday and full date format,
      * ex: todaysDate = September 27; dayOfWeek = Wednesday
      * @param  {string} date Date in format MM-DD-YY
-     * @return {object}      Object containing todaysDate and 
+     * @return {object}      Object containing todaysDate and
      *                       dayOfWeek as strings
      */
     formatDate: function (date) {
@@ -716,4 +716,4 @@ angular.module("dashboard.services", [])
       };
     }
   }
-});
+}]);
