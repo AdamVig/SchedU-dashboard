@@ -13,6 +13,8 @@ angular.module("dashboard", ["dashboard.controllers", "dashboard.services"])
   "Sp": "#34495e"
 })
 
+.constant("dismissal", moment().hour(14).minute(20).second(0))
+
 .constant("dayLetters", [
   "a", "b", "c", "d", "e", "f", "g"
 ])
