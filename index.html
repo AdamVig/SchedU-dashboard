@@ -17,8 +17,16 @@
   <!-- endinject -->
 
   <!-- inject:js -->
-  <script src="/js/lib.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/lib/js/Chart.js"></script>
+  <script src="/lib/js/angular.js"></script>
+  <script src="/lib/js/moment.js"></script>
+  <script src="/lib/js/ngActivityIndicator.js"></script>
+  <script src="/lib/js/ngChart.js"></script>
+  <script src="/lib/js/pouchdb.min.js"></script>
+  <script src="/lib/js/underscore.js"></script>
+  <script src="/js/controllers.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/services.js"></script>
   <!-- endinject -->
 </head>
 <body ng-controller="DashboardCtrl">
@@ -39,39 +47,18 @@
         </ol>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <h1 class="center caps">Users</h1>
-        <canvas class="py2" tc-chartjs chart-type="pie" chart-data="charts.userGrades.data" chart-options="charts.userGrades.options"></canvas>
-        <table class="table-light clearfix">
-          <tr class="center bg-light-gray">
-            <td>Users</td>
-            <td>Grade</td>
-          </tr>
-          <tr ng-repeat="grade in charts.userGrades.data | orderBy:'value':true"
-              ng-style="{'background-color':grade.highlight}">
-            <td>{{grade.value}}</td>
-            <td>{{grade.label}}</td>
-          </tr>
-          <tr class="bg-darken-1">
-            <td>{{userCount.total}}</td>
-            <td>total</td>
-          </tr>
-        </table>
+        <ng-include src="'templates/graphs/users-by-grade.html'"></ng-include>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <h1 class="center caps">Feedback</h1>
-        <canvas tc-chartjs-bar chart-options="charts.feedbackItems.options" chart-data="charts.feedbackItems.data" auto-legend></canvas>
-        <table class="table-light clearfix left">
-          <tr class="center bg-light-gray">
-            <td>#</td>
-            <td>Votes</td>
-            <td>Description</td>
-          </tr>
-          <tr ng-repeat="feedbackItem in feedbackItems">
-            <td>{{$index + 1}}</td>
-            <td>{{feedbackItem.votes}}</td>
-            <td>{{feedbackItem.name}}</td>
-          </tr>
-        </table>
+        <ng-include src="'templates/graphs/feedback-votes.html'"></ng-include>
+      </div>
+    </div>
+    <div class="container clearfix">
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
+        <ng-include src="'templates/graphs/users-by-platform.html'"></ng-include>
+      </div>
+      <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
+        <ng-include src="'templates/graphs/users-by-last-login.html'"></ng-include>
       </div>
     </div>
     <div class="container clearfix"
