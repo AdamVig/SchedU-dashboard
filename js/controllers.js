@@ -18,7 +18,7 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
 
     return DataService.getAllUsers();
 
-  // Get all users and create user grades chart
+  // Get all users and create user charts
   }).then(function (response) {
     $scope.allUsers = response.data;
     $scope.userCount = ParseService.countUsers($scope.allUsers);
@@ -30,9 +30,32 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
         segmentShowStroke : true,
         //String - The colour of each segment stroke
         segmentStrokeColor : '#fff',
-
         //Number - The width of each segment stroke
         segmentStrokeWidth : 1
+      }
+    };
+
+    $scope.charts.userPlatforms = {
+      "data": ChartDataService.parseUserPlatforms($scope.allUsers),
+      "options": {
+        //Boolean - Whether we should show a stroke on each segment
+        segmentShowStroke : true,
+        //String - The colour of each segment stroke
+        segmentStrokeColor : '#fff',
+        //Number - The width of each segment stroke
+        segmentStrokeWidth : 1
+      }
+    };
+
+    $scope.charts.userLoginsData = ChartDataService.parseUserLogins($scope.allUsers);
+
+    $scope.charts.userLogins = {
+      "data": {
+        'labels': _.keys($scope.charts.userLoginsData),
+        'datasets': [{
+          'fillColor': 'hsla(115, 95%, 16%, 1)',
+          'data': _.values($scope.charts.userLoginsData)
+        }]
       }
     };
 
@@ -44,10 +67,7 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
     $scope.feedbackItems = ParseService.countFeedback($scope.allUsers, $scope.feedbackItemsList);
     $scope.feedbackItems = ParseService.sortFeedbackItems($scope.feedbackItems);
     $scope.charts.feedbackItems = {
-      "data": ChartDataService.parseFeedback($scope.feedbackItems),
-      "options": {
-        "legendTemplate": '<ul class="tc-chart-js-legend display-none"></ul>'
-      }
+      "data": ChartDataService.parseFeedback($scope.feedbackItems)
     };
 
     return DataService.getVersions();
@@ -60,7 +80,9 @@ angular.module("dashboard.controllers", [ 'tc.chartjs', 'ngActivityIndicator' ])
   }).finally(function (response) {
     // Hide loader
     $activityIndicator.stopAnimating();
+
   });
+
 }])
 
 .controller("AddScheduleCtrl", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {

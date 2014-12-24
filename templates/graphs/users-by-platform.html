@@ -1,0 +1,13 @@
+<h1 class="center caps">Platforms</h1>
+<canvas class="py2" tc-chartjs chart-type="pie" chart-data="charts.userPlatforms.data" chart-options="charts.userPlatforms.options"></canvas>
+<table class="table-light clearfix">
+  <tr class="center bg-light-gray">
+    <td>Users</td>
+    <td>Platform</td>
+  </tr>
+  <tr ng-repeat="platform in charts.userPlatforms.data | orderBy:'value':true"
+      ng-style="{'background-color': platform.highlight}">
+    <td>{{platform.value}}</td>
+    <td>{{platform.label}}</td>
+  </tr>
+</table>
