@@ -1,0 +1,17 @@
+<h1 class="center caps">Users</h1>
+<canvas class="py2" tc-chartjs chart-type="pie" chart-data="charts.userGrades.data" chart-options="charts.userGrades.options"></canvas>
+<table class="table-light clearfix">
+  <tr class="center bg-light-gray">
+    <td>Users</td>
+    <td>Grade</td>
+  </tr>
+  <tr ng-repeat="grade in charts.userGrades.data | orderBy:'value':true"
+      ng-style="{'background-color': grade.highlight}">
+    <td>{{grade.value}}</td>
+    <td>{{grade.label}}</td>
+  </tr>
+  <tr class="bg-darken-1">
+    <td>{{userCount.total}}</td>
+    <td>total</td>
+  </tr>
+</table>
