@@ -17,8 +17,16 @@
   <!-- endinject -->
 
   <!-- inject:js -->
-  <script src="/js/lib.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="/lib/js/Chart.js"></script>
+  <script src="/lib/js/angular.js"></script>
+  <script src="/lib/js/moment.js"></script>
+  <script src="/lib/js/ngActivityIndicator.js"></script>
+  <script src="/lib/js/ngChart.js"></script>
+  <script src="/lib/js/pouchdb.min.js"></script>
+  <script src="/lib/js/underscore.js"></script>
+  <script src="/js/controllers.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/services.js"></script>
   <!-- endinject -->
 </head>
 <body ng-controller="DashboardCtrl">
@@ -39,24 +47,24 @@
         </ol>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <ng-include src="'templates/graphs/users-by-grade.html'"></ng-include>
+        <ng-include src="'html/graphs/_users-by-grade.html'"></ng-include>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <ng-include src="'templates/graphs/feedback-votes.html'"></ng-include>
+        <ng-include src="'html/graphs/_feedback-votes.html'"></ng-include>
       </div>
     </div>
     <div class="container clearfix">
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <ng-include src="'templates/graphs/users-by-platform.html'"></ng-include>
+        <ng-include src="'html/graphs/_users-by-platform.html'"></ng-include>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
-        <ng-include src="'templates/graphs/users-by-last-login.html'"></ng-include>
+        <ng-include src="'html/graphs/_users-by-last-login.html'"></ng-include>
       </div>
     </div>
     <div class="container clearfix"
          ng-show="globals.addScheduleOn"
          ng-init="globals.addScheduleOn = false">
-      <ng-include src="'templates/add-schedule.html'"></ng-include>
+      <ng-include src="'html/_add-schedule.html'"></ng-include>
     </div>
     <div class="container clearfix" ng-controller="ScheduleCtrl">
       <div class="sm-col sm-col-12 md-col-6 lg-col-6">
@@ -123,7 +131,7 @@
           </li>
         </ul>
       </div>
-      <ng-include src="'templates/edit-version.html'"></ng-include>
+      <ng-include src="'html/_edit-version.html'"></ng-include>
     </div>
   </main>
 </body>
