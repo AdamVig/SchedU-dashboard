@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     inject = require('gulp-inject'),
     connect = require('gulp-connect'),
+    open = require('gulp-open'),
     watch = require('gulp-watch');
 
 gulp.task('sass', function () {
@@ -64,13 +65,18 @@ gulp.task('prod-mode', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('serve', ['css-lib', 'sass', 'dev-mode', 'watch'], function () {
+gulp.task('serve', ['css-lib', 'sass', 'dev-mode'], function () {
+
   connect.server({
     livereload: true
   });
-});
 
-gulp.task('watch', function () {
+  gulp.src('index.html')
+    .pipe(open('', {
+      url: 'http://localhost:8080/',
+      app: 'Google Chrome'
+    }));
+
   gulp.watch('scss/*.scss', ['sass']);
 
   var changePaths = ['index.html', 'templates/**/*.html', 'js/**/*.js'];
