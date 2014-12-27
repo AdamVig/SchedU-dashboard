@@ -579,7 +579,9 @@ angular.module("dashboard.services", [])
       if (user.usage) {
 
         // Add one to count of users on this platform
-        _.findWhere(data, {'label': user.usage.platform.name}).value++;
+        if (_.findWhere(data, {'label': user.usage.platform.name})) {
+          _.findWhere(data, {'label': user.usage.platform.name}).value++;
+        }
       }
     });
 
@@ -778,7 +780,7 @@ angular.module("dashboard.services", [])
   };
 }])
 
-.factory('DateFactory', [function (dismissal) {
+.factory('DateFactory', ['dismissal', function (dismissal) {
 
   /**
   * If day is a weekend, change date to next Monday
