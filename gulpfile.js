@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     cssmin = require('gulp-minify-css'),
     sass = require('gulp-sass'),
     inject = require('gulp-inject'),
-    connect = require('gulp-connect');
+    connect = require('gulp-connect'),
+    watch = require('gulp-watch');
 
 gulp.task('sass', function () {
   return gulp.src('scss/main.scss')
@@ -47,12 +48,6 @@ gulp.task('inject-css', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('serve', ['js', 'js-lib', 'css-lib', 'sass', 'dev-mode', 'watch'], function() {
-  connect.server({
-    livereload: true
-  });
-});
-
 gulp.task('inject-js', function () {
   var sources = gulp.src(['!js/main.js', '!js/lib.js', 'lib/js/*.js', 'js/*.js'], {read: false});
 
@@ -69,10 +64,22 @@ gulp.task('prod-mode', function () {
     .pipe(gulp.dest('./'));
 });
 
+gulp.task('serve', ['css-lib', 'sass', 'dev-mode', 'watch'], function () {
+  connect.server({
+    livereload: true
+  });
+});
+
 gulp.task('watch', function () {
-  return gulp.watch('scss/*.scss', ['sass']);
+  gulp.watch('scss/*.scss', ['sass']);
+
+  var changePaths = ['index.html', 'templates/**/*.html', 'js/**/*.js'];
+
+  return gulp.src(changePaths)
+    .pipe(watch(changePaths))
+    .pipe(connect.reload());
 });
 
 gulp.task('dev-mode', ['inject-css', 'inject-js']);
-gulp.task('build', ['js', 'js-lib', 'css-lib', 'sass', 'prod-mode'])
+gulp.task('build', ['js', 'js-lib', 'css-lib', 'sass', 'prod-mode']);
 gulp.task('default', ['js', 'js-lib', 'css-lib', 'sass', 'dev-mode']);
