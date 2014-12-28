@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    size = require('gulp-size'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     cssmin = require('gulp-minify-css'),
@@ -7,7 +6,9 @@ var gulp = require('gulp'),
     inject = require('gulp-inject'),
     connect = require('gulp-connect'),
     open = require('gulp-open'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    order = require('gulp-order'),
+    series = require('stream-series');
 
 gulp.task('sass', function () {
   return gulp.src('scss/main.scss')
@@ -50,10 +51,12 @@ gulp.task('inject-css', function () {
 });
 
 gulp.task('inject-js', function () {
-  var sources = gulp.src(['!js/main.js', '!js/lib.js', 'lib/js/*.js', 'js/*.js'], {read: false});
+  var libSources = gulp.src('lib/js/*.js', {read: false});
+  var mainSources = gulp.src(['!js/main.js', '!js/lib.js', 'js/**/*.js'], {read: false})
+    .pipe(order(['dashboard.js', '*.js', '**/*.js']));
 
   return gulp.src('index.html')
-    .pipe(inject(sources))
+    .pipe(inject(series(libSources, mainSources)))
     .pipe(gulp.dest('./'));
 });
 
@@ -79,10 +82,10 @@ gulp.task('serve', ['css-lib', 'sass', 'dev-mode'], function () {
 
   gulp.watch('scss/*.scss', ['sass']);
 
-  var changePaths = ['index.html', 'templates/**/*.html', 'js/**/*.js'];
+  var watchPaths = ['index.html', 'templates/**/*.html', 'js/**/*.js'];
 
-  return gulp.src(changePaths)
-    .pipe(watch(changePaths))
+  return gulp.src(watchPaths)
+    .pipe(watch(watchPaths))
     .pipe(connect.reload());
 });
 
