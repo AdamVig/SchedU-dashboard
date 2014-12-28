@@ -12,8 +12,10 @@
   <link rel="icon" href="favicon.ico" sizes="32x32">
 
   <!-- inject:css -->
-  <link rel="stylesheet" href="/css/lib.css">
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/css/basscss.min.css">
+  <link rel="stylesheet" href="/lib/css/ngActivityIndicator.min.css">
+  <link rel="stylesheet" href="/lib/css/normalize.css">
   <!-- endinject -->
 
   <!-- inject:js -->
@@ -24,9 +26,22 @@
   <script src="/lib/js/ngChart.js"></script>
   <script src="/lib/js/pouchdb.min.js"></script>
   <script src="/lib/js/underscore.js"></script>
-  <script src="/js/controllers.js"></script>
   <script src="/js/dashboard.js"></script>
-  <script src="/js/services.js"></script>
+  <script src="/js/constants.js"></script>
+  <script src="/js/directives.js"></script>
+  <script src="/js/filters.js"></script>
+  <script src="/js/controllers/AddScheduleController.js"></script>
+  <script src="/js/controllers/DashboardController.js"></script>
+  <script src="/js/controllers/EditVersionController.js"></script>
+  <script src="/js/controllers/ScheduleController.js"></script>
+  <script src="/js/controllers/UserController.js"></script>
+  <script src="/js/controllers/VersionController.js"></script>
+  <script src="/js/services/ChartDataService.js"></script>
+  <script src="/js/services/DataService.js"></script>
+  <script src="/js/services/DateFactory.js"></script>
+  <script src="/js/services/OrderSchedulesFactory.js"></script>
+  <script src="/js/services/ParseService.js"></script>
+  <script src="/js/services/ScheduleFactory.js"></script>
   <!-- endinject -->
 </head>
 <body ng-controller="DashboardCtrl">
