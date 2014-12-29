@@ -1,4 +1,4 @@
-controllers.controller("DashboardCtrl", ['$scope', '$filter', '$activityIndicator', 'DataService', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
+controllers.controller("DashboardController", ['$scope', '$filter', '$activityIndicator', 'DataService', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
 
   var date = DateFactory.currentDay();
   var dateString = date.format("MM-DD-YY");

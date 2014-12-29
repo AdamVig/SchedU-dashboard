@@ -1,4 +1,4 @@
-controllers.controller("AddScheduleCtrl", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {
+controllers.controller("AddScheduleController", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {
 
   // Set default value
   $scope.addSchedule = {};

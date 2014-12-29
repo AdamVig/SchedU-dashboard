@@ -1,4 +1,4 @@
-controllers.controller("VersionsCtrl", ['$scope', 'DataService', function ($scope, DataService) {
+controllers.controller("VersionsController", ['$scope', 'DataService', function ($scope, DataService) {
   $scope.currentVersionNumber = "";
   $scope.$watch("currentVersionNumber", function (currentVersionNumber) {
     $scope.currentVersion = _.findWhere($scope.versions, {'versionNumber': currentVersionNumber} );

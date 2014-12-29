@@ -1,4 +1,4 @@
-controllers.controller("EditVersionCtrl", ['$scope', 'DataService', function ($scope, DataService) {
+controllers.controller("EditVersionController", ['$scope', 'DataService', function ($scope, DataService) {
   $scope.submit = function () {
 
     $scope.loading = true;
