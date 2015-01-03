@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    print = require('gulp-print'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     cssmin = require('gulp-minify-css'),
@@ -8,7 +9,9 @@ var gulp = require('gulp'),
     open = require('gulp-open'),
     watch = require('gulp-watch'),
     order = require('gulp-order'),
-    series = require('stream-series');
+    mainBowerFiles = require('main-bower-files'),
+    series = require('stream-series'),
+    gulpFilter = require('gulp-filter');
 
 gulp.task('sass', function () {
   return gulp.src('scss/main.scss')
@@ -24,6 +27,21 @@ gulp.task('js', function () {
     .pipe(gulp.dest('js'));
 });
 
+gulp.task('bower', function () {
+
+  var jsFilter = gulpFilter(['!**/*.min.js', '**/*.js']);
+  var cssFilter = gulpFilter(['*.css']);
+
+  gulp.src(mainBowerFiles())
+    .pipe(cssFilter)
+    .pipe(gulp.dest('./lib/css'));
+
+  return gulp.src(mainBowerFiles())
+    .pipe(jsFilter)
+    .pipe(gulp.dest('./lib/js'));
+
+});
+
 gulp.task('js-lib', function () {
   return gulp.src(['!js/lib.js', 'lib/js/*.js'])
   .pipe(uglify())
@@ -36,11 +54,6 @@ gulp.task('css-lib', function () {
     .pipe(cssmin())
     .pipe(concat('lib.css'))
     .pipe(gulp.dest('css'));
-});
-
-gulp.task('size', function () {
-  return gulp.src(['css/main.css', 'css/lib.css', 'js/main.js', 'js/lib.js'])
-    .pipe(size({showFiles: true}));
 });
 
 gulp.task('inject-css', function () {
@@ -68,7 +81,7 @@ gulp.task('prod-mode', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('serve', ['css-lib', 'sass', 'dev-mode'], function () {
+gulp.task('serve', ['sass', 'dev-mode'], function () {
 
   connect.server({
     livereload: true
