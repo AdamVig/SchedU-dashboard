@@ -1,0 +1,35 @@
+{
+  "name": "SchedU-dashboard",
+  "version": "0.0.0",
+  "homepage": "https://github.com/AdamVig/SchedU-dashboard",
+  "authors": [
+    "Adam Vigneaux <adamvigneaux@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "latest",
+    "chartjs": "latest",
+    "momentjs": "latest",
+    "ngActivityIndicator": "latest",
+    "pouchdb": "latest",
+    "underscore": "latest",
+    "normalize-css": "latest",
+    "basscss": "latest"
+  },
+  "overrides": {
+    "chartjs": {
+      "main": "Chart.js"
+    },
+    "basscss": {
+      "main": "css/basscss.css"
+    }
+  }
+}
