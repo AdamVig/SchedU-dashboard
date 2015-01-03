@@ -6,19 +6,17 @@ controllers.controller("AddScheduleController", ['$scope', 'DataService', 'Sched
   $scope.errorMessage = "";
   $scope.lastSchedule = {};
 
-  // Format date on change
-  $scope.$watch("addSchedule.date", function (date){
-    $scope.addSchedule.date = ParseService.formatDate(date);
-  });
-
-  // Format first period on change
-  $scope.$watch("addSchedule.firstPeriod", function (period) {
-    period = period || "";
-    $scope.addSchedule.firstPeriod = period.replace(/[^a-g]+/g, '');
-  });
-
-  // Display inputted data as schedule as it is entered
+  // Fires on changes to add schedule form
   $scope.$watchCollection("addSchedule", function (addSchedule) {
+
+    // Format date input
+    $scope.addSchedule.date = ParseService.formatDate(addSchedule.date);
+
+    // Reject characters other than lowercase a-g from first period input
+    var period = addSchedule.firstPeriod || "";
+    $scope.addSchedule.firstPeriod = period.replace(/[^a-g]+/g, '');
+
+    // Make schedule
     $scope.schedule = ScheduleFactory.make(addSchedule);
   });
 
