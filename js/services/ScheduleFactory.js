@@ -1,19 +1,18 @@
-services.factory('ScheduleFactory', ['dayLetters', '$filter', function(dayLetters, $filter) {
+services.factory('ScheduleFactory', ['$filter', function($filter) {
 
   /**
    * Make period order based on first period letter and day type
    * @param  {string}  firstPeriod    Single letter representing first period
-   * @param  {boolean} activityPeriod True if activity period day type, false otherwise
    * @return {array or boolean}   Array, ex: ['a'->'g'] or false if firstPeriod = null
    */
-  function makePeriodOrder(firstPeriod, activityPeriod) {
+  function makePeriodOrder(firstPeriod) {
 
     // Will trigger infinite loop if not defined
     if (firstPeriod) {
 
       // Unsorted list of period letters
       // dayLetters : constant, ["a"-"g"]
-      var periodOrder = dayLetters;
+      var periodOrder = ["a", "b", "c", "d", "e", "f", "g"];
 
       // While list isn't sorted
       while (periodOrder[0] != firstPeriod) {
@@ -24,11 +23,7 @@ services.factory('ScheduleFactory', ['dayLetters', '$filter', function(dayLetter
         periodOrder.push(letter);
       }
 
-      if (activityPeriod) {
-        periodOrder.splice(2, 0, "Activity Period");
-      }
-
-      // firstPeriod not defined
+    // firstPeriod not defined
     } else {
       periodOrder = false;
     }
@@ -58,19 +53,21 @@ services.factory('ScheduleFactory', ['dayLetters', '$filter', function(dayLetter
       }
 
       // If only first period provided:
+      // Generate period order based on first period
+      if (addScheduleForm.dayType == "normal") {
+
+        schedule.special = false;
+
+        schedule.periodOrder = makePeriodOrder(addScheduleForm.firstPeriod);
+
+      // If only first period provided and activity period:
       // Generate period order based on first period,
-      // add activity period if necessary
-      if (addScheduleForm.dayType == "normal" || addScheduleForm.dayType == "activityperiod") {
+      // add activity period
+      } else if (addScheduleForm.dayType == "activityperiod") {
 
-        // Decide if activity period
-        if (addScheduleForm.dayType == "activityperiod") {
-          var activityPeriod = true;
-        } else {
-          var activityPeriod = false;
-          schedule.special = false;
-        }
+        schedule.periodOrder = makePeriodOrder(addScheduleForm.firstPeriod);
 
-        schedule.periodOrder = makePeriodOrder(addScheduleForm.firstPeriod, activityPeriod);
+        schedule.periodOrder.splice(2, 0, "Activity Period");
 
         // If period order exists in form data
         // (early release, custom, early release activity period):
