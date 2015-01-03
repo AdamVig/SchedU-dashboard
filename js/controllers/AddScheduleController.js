@@ -34,5 +34,8 @@ controllers.controller("AddScheduleController", ['$scope', 'DataService', 'Sched
     // Reset values
     $scope.addSchedule = {};
     $scope.addSchedule.dayType = "normal";
+
+    // Focus date input
+    document.getElementById('date-input').focus();
   };
 }]);
