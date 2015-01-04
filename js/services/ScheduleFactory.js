@@ -60,7 +60,7 @@ services.factory('ScheduleFactory', ['$filter', function($filter) {
 
         schedule.periodOrder = makePeriodOrder(addScheduleForm.firstPeriod);
 
-      // If only first period provided and activity period:
+      // If only first period provided, and activity period:
       // Generate period order based on first period,
       // add activity period
       } else if (addScheduleForm.dayType == "activityperiod") {
