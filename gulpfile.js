@@ -21,7 +21,8 @@ gulp.task('sass', function () {
 });
 
 gulp.task('js', function () {
-  return gulp.src(['!js/main.js', 'js/*.js'])
+  return gulp.src(['!js/main.js', 'js/**/*.js'])
+    .pipe(order(['dashboard.js', '*.js', '**/*.js']))
     .pipe(uglify())
     .pipe(concat('main.js'))
     .pipe(gulp.dest('js'));
@@ -73,7 +74,7 @@ gulp.task('inject-js', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('prod-mode', function () {
+gulp.task('inject-minified', function () {
   var sources = gulp.src(['js/lib.js', 'js/main.js', 'css/lib.css', 'css/main.css'], {read: false});
 
   return gulp.src('index.html')
@@ -103,5 +104,5 @@ gulp.task('serve', ['sass', 'dev-mode'], function () {
 });
 
 gulp.task('dev-mode', ['inject-css', 'inject-js']);
-gulp.task('build', ['js', 'js-lib', 'css-lib', 'sass', 'prod-mode']);
+gulp.task('build', ['js', 'js-lib', 'css-lib', 'sass', 'inject-minified']);
 gulp.task('default', ['js', 'js-lib', 'css-lib', 'sass', 'dev-mode']);
