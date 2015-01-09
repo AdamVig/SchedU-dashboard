@@ -1,4 +1,4 @@
-controllers.controller("DashboardController", ['$scope', '$filter', '$activityIndicator', 'DataService', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
+controllers.controller("DashboardController", ['$scope', '$filter', '$activityIndicator', 'DataService', 'DatabaseFactory', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, DatabaseFactory, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
 
   var date = DateFactory.currentDay();
   var dateString = date.format("MM-DD-YY");
@@ -6,19 +6,29 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
   $scope.globals = {};
   $scope.scheduleString = " ";
 
+  var Database = {
+    'schedule': DatabaseFactory('schedule'),
+    'user': DatabaseFactory('user'),
+    'feedback': DatabaseFactory('feedback'),
+    'versions': DatabaseFactory('versions')
+  };
+
   $activityIndicator.startAnimating();
 
   // Get all schedules and current day's schedule
-  DataService.getAllSchedules().then(function (response) {
-    $scope.allSchedules = $filter('orderBy')(response.data, OrderSchedulesFactory, true);
-    $scope.scheduleObject = _.findWhere(response.data, {'_id': dateString});
+  Database.schedule.getAll().then(function (response) {
+
+    var schedules = DataService.extractDocs(response);
+    $scope.allSchedules = $filter('orderBy')(schedules, OrderSchedulesFactory, true);
+    $scope.scheduleObject = _.findWhere($scope.allSchedules, {'_id': dateString});
     $scope.scheduleString = ParseService.parseSchedule($scope.scheduleObject);
 
-    return DataService.getAllUsers();
+    return Database.user.getAll();
 
     // Get all users and create user charts
   }).then(function (response) {
-    $scope.allUsers = response.data;
+
+    $scope.allUsers = DataService.extractDocs(response);
     $scope.userCount = ParseService.countUsers($scope.allUsers);
 
     $scope.charts.userGrades = {
@@ -57,22 +67,24 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
       }
     };
 
-    return DataService.getFeedbackItems();
+    return Database.feedback.getAll();
 
     // Get all feedback items and create feedback items chart
   }).then(function (response) {
-    $scope.feedbackItemsList = response.data;
+
+    $scope.feedbackItemsList = DataService.extractDocs(response);
     $scope.feedbackItems = ParseService.countFeedback($scope.allUsers, $scope.feedbackItemsList);
     $scope.feedbackItems = ParseService.sortFeedbackItems($scope.feedbackItems);
     $scope.charts.feedbackItems = {
       "data": ChartDataService.parseFeedback($scope.feedbackItems)
     };
 
-    return DataService.getVersions();
+    return Database.versions.getAll();
 
     // Get all versions and latest version
   }).then(function (response) {
-    $scope.versions = $filter('orderBy')(response.data, 'versionNumber', 'reverse');
+    var versions = DataService.extractDocs(response);
+    $scope.versions = $filter('orderBy')(versions, 'versionNumber', 'reverse');
     $scope.currentVersion = $scope.versions[0];
 
   }).finally(function (response) {
