@@ -182,7 +182,7 @@ services.service("ParseService", ['$filter', function ($filter) {
       _.each(user.feedback.voteItems, function (feedbackItem) {
 
         // Add a vote
-        feedbackItems[feedbackItem].votes++;
+        _.findWhere(feedbackItems, {'_id': feedbackItem}).votes++;
 
       });
     });
