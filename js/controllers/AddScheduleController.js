@@ -1,4 +1,4 @@
-controllers.controller("AddScheduleController", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', 'DatabaseFactory', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters, DatabaseFactory) {
+controllers.controller("AddScheduleController", ['$scope', '$filter', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', 'DatabaseFactory', function ($scope, $filter, DataService, ScheduleFactory, ParseService, dayLetters, DatabaseFactory) {
 
   // Set default value
   $scope.addSchedule = {};
@@ -10,7 +10,7 @@ controllers.controller("AddScheduleController", ['$scope', 'DataService', 'Sched
   $scope.$watchCollection("addSchedule", function (addSchedule) {
 
     // Format date input
-    $scope.addSchedule.date = ParseService.formatDate(addSchedule.date);
+    $scope.addSchedule.date = $filter('date')(addSchedule.date);
 
     // Reject characters other than lowercase a-g from first period input
     var period = addSchedule.firstPeriod || "";
