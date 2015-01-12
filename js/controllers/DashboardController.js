@@ -67,7 +67,7 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
 
     $scope.feedbackItemsList = DataService.extractDocs(response);
     $scope.feedbackItems = ParseService.countFeedback($scope.allUsers, $scope.feedbackItemsList);
-    $scope.feedbackItems = ParseService.sortFeedbackItems($scope.feedbackItems);
+    $scope.feedbackItems = $filter('orderBy')(_.toArray($scope.feedbackItems), 'votes', 'reverse');;
     $scope.charts.feedbackItems = {
       "data": ChartDataService.parseFeedback($scope.feedbackItems)
     };
@@ -76,7 +76,7 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
 
     // Get all versions and latest version
   }).then(function (response) {
-    
+
     var versions = DataService.extractDocs(response);
     $scope.versions = $filter('orderBy')(versions, 'versionNumber', 'reverse');
     $scope.currentVersion = $scope.versions[0];
