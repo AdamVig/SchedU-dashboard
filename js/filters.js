@@ -13,6 +13,8 @@ filters.filter('titleCase', [function() {
 
     if (!date) return '';
 
+    date = date.replace(/[^0-9]+/g, '');
+
     var formattedDate = date;
 
     var month = date.substring(0,2);
