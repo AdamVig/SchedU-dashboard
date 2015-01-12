@@ -1,4 +1,4 @@
-controllers.controller("DashboardController", ['$scope', '$filter', '$activityIndicator', 'DataService', 'DatabaseFactory', 'ParseService', 'DateFactory', 'ChartDataService', 'OrderSchedulesFactory', function ($scope, $filter, $activityIndicator, DataService, DatabaseFactory, ParseService, DateFactory, ChartDataService, OrderSchedulesFactory) {
+controllers.controller("DashboardController", ['$scope', '$filter', '$activityIndicator', 'DataService', 'DatabaseFactory', 'ParseService', 'DateFactory', 'ChartService', function ($scope, $filter, $activityIndicator, DataService, DatabaseFactory, ParseService, DateFactory, ChartService) {
 
   var date = DateFactory.currentDay();
   var dateString = date.format("MM-DD-YY");
@@ -11,45 +11,27 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
   // Get all schedules and current day's schedule
   DatabaseFactory.schedule.getAll().then(function (response) {
 
-    var schedules = DataService.extractDocs(response);
-    $scope.allSchedules = $filter('orderBy')(schedules, OrderSchedulesFactory, true);
+    $scope.allSchedules = $filter('orderBy')(
+      DataService.extractDocs(response),
+      function (schedule) {
+        return moment(schedule._id, 'MM-DD-YY').format('X')
+      },
+      true
+    );
     $scope.scheduleObject = _.findWhere($scope.allSchedules, {'_id': dateString});
     $scope.scheduleString = ParseService.parseSchedule($scope.scheduleObject);
 
     return DatabaseFactory.user.getAll();
 
-    // Get all users and create user charts
+  // Get all users and create user charts
   }).then(function (response) {
 
     $scope.allUsers = DataService.extractDocs(response);
     $scope.userCount = ParseService.countUsers($scope.allUsers);
 
-    $scope.charts.userGrades = {
-      "data": ChartDataService.parseUserGrades($scope.userCount),
-      "options": {
-        //Boolean - Whether we should show a stroke on each segment
-        segmentShowStroke : true,
-        //String - The colour of each segment stroke
-        segmentStrokeColor : '#fff',
-        //Number - The width of each segment stroke
-        segmentStrokeWidth : 1
-      }
-    };
-
-    $scope.charts.userPlatforms = {
-      "data": ChartDataService.parseUserPlatforms($scope.allUsers),
-      "options": {
-        //Boolean - Whether we should show a stroke on each segment
-        segmentShowStroke : true,
-        //String - The colour of each segment stroke
-        segmentStrokeColor : '#fff',
-        //Number - The width of each segment stroke
-        segmentStrokeWidth : 1
-      }
-    };
-
-    $scope.charts.userLoginsData = ChartDataService.parseUserLogins($scope.allUsers);
-
+    $scope.charts.userGrades = ChartService.chartGrades($scope.userCount);
+    $scope.charts.userPlatforms = ChartService.chartPlatforms($scope.allUsers);
+    $scope.charts.userLoginsData = ChartService.chartLogins($scope.allUsers);
     $scope.charts.userLogins = {
       "data": {
         'labels': _.keys($scope.charts.userLoginsData),
@@ -68,9 +50,7 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
     $scope.feedbackItemsList = DataService.extractDocs(response);
     $scope.feedbackItems = ParseService.countFeedback($scope.allUsers, $scope.feedbackItemsList);
     $scope.feedbackItems = $filter('orderBy')(_.toArray($scope.feedbackItems), 'votes', 'reverse');;
-    $scope.charts.feedbackItems = {
-      "data": ChartDataService.parseFeedback($scope.feedbackItems)
-    };
+    $scope.charts.feedbackItems = ChartService.chartFeedback($scope.feedbackItems);
 
     return DatabaseFactory.versions.getAll();
 
@@ -82,9 +62,9 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
     $scope.currentVersion = $scope.versions[0];
 
   }).finally(function (response) {
-    // Hide loader
-    $activityIndicator.stopAnimating();
 
+    $activityIndicator.stopAnimating();
+    
   });
 
 }]);
