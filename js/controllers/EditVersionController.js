@@ -1,4 +1,4 @@
-controllers.controller("EditVersionController", ['$scope', 'DataService', function ($scope, DataService) {
+controllers.controller("EditVersionController", ['$scope', 'DataService', 'DatabaseFactory', function ($scope, DataService, DatabaseFactory) {
   $scope.submit = function () {
 
     $scope.loading = true;
@@ -16,7 +16,7 @@ controllers.controller("EditVersionController", ['$scope', 'DataService', functi
     var version = angular.copy($scope.currentVersion);
 
     // Update version in database
-    DataService.updateVersion(version).then(function (response) {
+    DatabaseFactory.versions.insert(version).then(function (response) {
       $scope.currentVersion._rev = response.data.rev;
       $scope.loading = false;
     });

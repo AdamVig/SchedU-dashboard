@@ -1,4 +1,4 @@
-controllers.controller("AddScheduleController", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters) {
+controllers.controller("AddScheduleController", ['$scope', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', 'DatabaseFactory', function ($scope, DataService, ScheduleFactory, ParseService, dayLetters, DatabaseFactory) {
 
   // Set default value
   $scope.addSchedule = {};
@@ -24,7 +24,7 @@ controllers.controller("AddScheduleController", ['$scope', 'DataService', 'Sched
 
     $scope.loading = true;
 
-    DataService.addSchedule($scope.schedule).then(function (response) {
+    DatabaseFactory.schedule.insert($scope.schedule, $scope.schedule.date).then(function (response) {
       console.log(response);
       $scope.loading = false;
     });

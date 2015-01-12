@@ -1,4 +1,4 @@
-controllers.controller("VersionsController", ['$scope', 'DataService', function ($scope, DataService) {
+controllers.controller("VersionsController", ['$scope', 'DataService', 'DatabaseFactory', function ($scope, DataService, DatabaseFactory) {
   $scope.currentVersionNumber = "";
   $scope.$watch("currentVersionNumber", function (currentVersionNumber) {
     $scope.currentVersion = _.findWhere($scope.versions, {'versionNumber': currentVersionNumber} );
@@ -13,9 +13,9 @@ controllers.controller("VersionsController", ['$scope', 'DataService', function 
       "changes": []
     };
 
-    DataService.addVersion(version).then(function (response) {
+    DatabaseFactory.versions.insert(version).then(function (response) {
 
-      return DataService.getVersion(response.data.id);
+      return DatabaseFactory.versions.get(response.data.id);
 
     }).then(function (response) {
 
@@ -28,5 +28,4 @@ controllers.controller("VersionsController", ['$scope', 'DataService', function 
 
     });
   };
-
 }]);

@@ -64,6 +64,12 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
           url: makeRequestUrl(couchUrl, databaseName, docId),
           data: docData
         });
+      } else if (docData._id) {
+        return $http({
+          method: "PUT",
+          url: makeRequestUrl(couchUrl, databaseName, docData._id),
+          data: docData
+        });
       } else {
         return $http({
           method: "POST",
