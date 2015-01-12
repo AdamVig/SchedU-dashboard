@@ -1,14 +1,26 @@
 services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
 
+  // Enable CORS
   $http.defaults.withCredentials = true;
 
+  /**
+   * Remove trailing slash
+   * @param  {string} url URL string
+   * @return {string}     URL string without trailing slash
+   */
   function removeTrailingSlash(url) {
     if(url.substr(-1) == '/') {
       return url.substr(0, url.length - 1);
     }
     return url;
   }
-
+  /**
+   * Build URL from given parts
+   * @param  {string} couchUrl     Complete URL of CouchDB server
+   * @param  {string} databaseName Name of database
+   * @param  {string} docId        Name of document
+   * @return {string}              Complete request URL
+   */
   function makeRequestUrl(couchUrl, databaseName, docId) {
     var requestUrl = removeTrailingSlash(couchUrl);
     if (databaseName) {
@@ -20,9 +32,18 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     return requestUrl;
   }
 
+  /**
+   * Database class
+   * @param {string} couchUrl     URL of CouchDB server
+   * @param {string} databaseName Name of database
+   */
   function SimpleCouch(couchUrl, databaseName) {
 
-    // Get document
+    /**
+     * Get a document from the database
+     * @param  {string}  docId ID of document
+     * @return {promise}       Promise resolved by response object
+     */
     this.get = function (docId) {
       return $http({
         method: "GET",
@@ -30,16 +51,34 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
       });
     };
 
-    // New document
-    this.insert = function (docId, docData) {
-      return $http({
-        method: "PUT",
-        url: makeRequestUrl(couchUrl, databaseName, docId),
-        data: docData
-      });
+    /**
+     * Add a document to the database with ID if specified
+     * @param  {object}  docData Data to put in place of document
+     * @param  {string}  docId   ID of document (optional)
+     * @return {promise}         Promise resolved by response object
+     */
+    this.insert = function (docData, docId) {
+      if (docId) {
+        return $http({
+          method: "PUT",
+          url: makeRequestUrl(couchUrl, databaseName, docId),
+          data: docData
+        });
+      } else {
+        return $http({
+          method: "POST",
+          url: makeRequestUrl(couchUrl, databaseName),
+          data: docData
+        });
+      }
     };
 
-    // Delete document
+    /**
+     * Delete document from database
+     * @param  {string}  docId  ID of document
+     * @param  {string}  docRev Current revision of document in database
+     * @return {promise}        Promise resolved by response object
+     */
     this.delete = function (docId, docRev) {
       return $http({
         method: "DELETE",
@@ -48,7 +87,10 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
       });
     };
 
-    // Get all documents
+    /**
+     * Get all documents from database
+     * @return {promise}    Promise resolved by response object
+     */
     this.getAll = function () {
       return $http({
         method: "GET",
