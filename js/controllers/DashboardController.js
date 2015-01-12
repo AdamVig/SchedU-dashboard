@@ -6,24 +6,17 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
   $scope.globals = {};
   $scope.scheduleString = " ";
 
-  var Database = {
-    'schedule': DatabaseFactory('schedule'),
-    'user': DatabaseFactory('user'),
-    'feedback': DatabaseFactory('feedback'),
-    'versions': DatabaseFactory('versions')
-  };
-
   $activityIndicator.startAnimating();
 
   // Get all schedules and current day's schedule
-  Database.schedule.getAll().then(function (response) {
+  DatabaseFactory.schedule.getAll().then(function (response) {
 
     var schedules = DataService.extractDocs(response);
     $scope.allSchedules = $filter('orderBy')(schedules, OrderSchedulesFactory, true);
     $scope.scheduleObject = _.findWhere($scope.allSchedules, {'_id': dateString});
     $scope.scheduleString = ParseService.parseSchedule($scope.scheduleObject);
 
-    return Database.user.getAll();
+    return DatabaseFactory.user.getAll();
 
     // Get all users and create user charts
   }).then(function (response) {
@@ -67,7 +60,7 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
       }
     };
 
-    return Database.feedback.getAll();
+    return DatabaseFactory.feedback.getAll();
 
     // Get all feedback items and create feedback items chart
   }).then(function (response) {
@@ -79,10 +72,11 @@ controllers.controller("DashboardController", ['$scope', '$filter', '$activityIn
       "data": ChartDataService.parseFeedback($scope.feedbackItems)
     };
 
-    return Database.versions.getAll();
+    return DatabaseFactory.versions.getAll();
 
     // Get all versions and latest version
   }).then(function (response) {
+    
     var versions = DataService.extractDocs(response);
     $scope.versions = $filter('orderBy')(versions, 'versionNumber', 'reverse');
     $scope.currentVersion = $scope.versions[0];
