@@ -58,8 +58,11 @@ services.factory('DatabaseFactory', ['$http', 'dbUrl', function($http, dbUrl) {
     };
   }
 
-  return function (databaseName) {
-    return new SimpleCouch(dbUrl, databaseName);
-  }
+  return {
+    'schedule':  new SimpleCouch(dbUrl, 'schedule'),
+    'user':  new SimpleCouch(dbUrl, 'user'),
+    'feedback':  new SimpleCouch(dbUrl, 'feedback'),
+    'versions':  new SimpleCouch(dbUrl, 'versions')
+  };
 
 }]);
