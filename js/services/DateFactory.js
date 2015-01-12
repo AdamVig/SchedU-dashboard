@@ -11,7 +11,7 @@ services.factory('DateFactory', ['dismissal', function (dismissal) {
     if (day.weekday() == 6) {
       day.add(2, 'days');
 
-      // Sunday
+    // Sunday
     } else if (day.weekday() == 0) {
       day.add(1, 'days');
     }
@@ -35,7 +35,7 @@ services.factory('DateFactory', ['dismissal', function (dismissal) {
       if (currentDay.isAfter(dismissal)) {
         currentDay.add(1, 'days');
       }
-      
+
       currentDay = skipWeekend(currentDay);
 
       return currentDay;
