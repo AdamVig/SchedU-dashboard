@@ -1,11 +1,11 @@
 <h1 class="center caps">Last Login</h1>
-<canvas tc-chartjs-bar class="bar-graph" chart-data="charts.userLogins.data"></canvas>
+<canvas tc-chartjs-bar class="bar-graph" chart-data="main.charts.userLogins.data"></canvas>
 <table class="table-light clearfix left">
   <tr class="center bg-light-gray">
     <td>Login Time</td>
     <td>Users</td>
   </tr>
-  <tr ng-repeat="(loginTime, numUsers) in charts.userLoginsData">
+  <tr ng-repeat="(loginTime, numUsers) in main.charts.userLoginsData">
     <td>{{loginTime}}</td>
     <td>{{numUsers}}</td>
   </tr>

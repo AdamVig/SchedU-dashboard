@@ -1,12 +1,12 @@
 <h1 class="center caps">Feedback</h1>
-<canvas tc-chartjs-bar class="bar-graph" chart-data="charts.feedbackItems.data"></canvas>
+<canvas tc-chartjs-bar class="bar-graph" chart-data="main.charts.feedbackItems.data"></canvas>
 <table class="table-light clearfix left">
   <tr class="center bg-light-gray">
     <td>#</td>
     <td>Votes</td>
     <td>Description</td>
   </tr>
-  <tr ng-repeat="feedbackItem in feedbackItems">
+  <tr ng-repeat="feedbackItem in main.feedbackItems">
     <td>{{$index + 1}}</td>
     <td>{{feedbackItem.votes}}</td>
     <td>{{feedbackItem.name}}</td>

@@ -1,10 +1,10 @@
 <div class="col-12 add-schedule"
-     ng-controller="AddScheduleController">
-  <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2" ng-submit="submit()">
+     ng-controller="AddScheduleController as addSchedules">
+  <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2" ng-submit="addSchedules.submit()">
     <h1>Add to Schedule</h1>
     <label>
       Day Type
-      <select class="block full-width field-light" ng-model="addSchedule.dayType">
+      <select class="block full-width field-light" ng-model="addSchedules.newSchedule.dayType">
         <option value="normal">Normal</option>
         <option value="activityperiod">Activity Period</option>
         <option value="holiday">Holiday</option>
@@ -19,41 +19,41 @@
              id="date-input"
              class="block full-width field-light"
              placeholder="mm-dd-yy"
-             ng-model="addSchedule.date">
+             ng-model="addSchedules.newSchedule.date">
     </label>
-    <label ng-show="addSchedule.dayType != 'holiday'">
+    <label ng-show="addSchedules.newSchedule.dayType != 'holiday'">
       Day Number
       <input type="number"
              class="block full-width field-light"
              placeholder="1-8"
              min="1"
              max="8"
-             ng-attr-required="{{addSchedule.dayType != 'holiday'}}"
-             ng-model="addSchedule.dayNumber">
+             ng-attr-required="{{addSchedules.newSchedule.dayType != 'holiday'}}"
+             ng-model="addSchedules.newSchedule.dayNumber">
     </label>
-    <label ng-show="addSchedule.dayType == 'normal' || addSchedule.dayType == 'activityperiod'">
+    <label ng-show="addSchedules.newSchedule.dayType == 'normal' || addSchedules.newSchedule.dayType == 'activityperiod'">
       First Period
       <input type="text"
              class="block full-width field-light"
              placeholder="a"
-             ng-model="addSchedule.firstPeriod">
+             ng-model="addSchedules.newSchedule.firstPeriod">
     </label>
-    <label ng-show="addSchedule.dayType == 'holiday'">
+    <label ng-show="addSchedules.newSchedule.dayType == 'holiday'">
       Holiday Name
-      <input type="text" class="block full-width field-light" placeholder="Holiday Name" ng-model="addSchedule.holidayName">
+      <input type="text" class="block full-width field-light" placeholder="Holiday Name" ng-model="addSchedules.newSchedule.holidayName">
     </label>
-    <div ng-show="addSchedule.dayType == 'earlyrelease' || addSchedule.dayType == 'custom' || addSchedule.dayType == 'earlyactivity'">
+    <div ng-show="addSchedules.newSchedule.dayType == 'earlyrelease' || addSchedules.newSchedule.dayType == 'custom' || addSchedules.newSchedule.dayType == 'earlyactivity'">
       <label>Fill in as many periods as there are in the day.</label>
       <input type="text"
              class="block full-width field-light"
              placeholder="Period Name"
              ng-repeat="num in [1,2,3,4,5,6,7,8]"
-             ng-model="addSchedule.periods[num]">
+             ng-model="addSchedules.newSchedule.periods[num]">
     </div>
     <submit-button text="Add schedule" classes="full-width"></submit-button>
   </form>
-  <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="lastSchedule">
+  <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="addSchedules.lastSchedule">
     <h1>Schedule Preview</h1>
-    <pre class="json-display">{{schedule | json}}</pre>
+    <pre class="json-display">{{addSchedules.schedule | json}}</pre>
   </div>
 </div>

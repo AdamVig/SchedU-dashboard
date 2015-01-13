@@ -1,37 +1,41 @@
 controllers.controller("AddScheduleController", ['$scope', '$filter', 'DataService', 'ScheduleFactory', 'ParseService', 'dayLetters', 'DatabaseFactory', function ($scope, $filter, DataService, ScheduleFactory, ParseService, dayLetters, DatabaseFactory) {
 
+  var addSchedules = this;
+
   // Set default value
-  $scope.addSchedule = {};
-  $scope.addSchedule.dayType = "normal";
-  $scope.errorMessage = "";
-  $scope.lastSchedule = {};
+  addSchedules.newSchedule = {};
+  addSchedules.newSchedule.dayType = "normal";
+  addSchedules.errorMessage = "";
+  addSchedules.lastSchedule = {};
 
   // Fires on changes to add schedule form
-  $scope.$watchCollection("addSchedule", function (addSchedule) {
+  $scope.$watchCollection(angular.bind(addSchedules, function () {
+    return addSchedules.newSchedule;
+  }), function (newSchedule) {
 
     // Format date input
-    $scope.addSchedule.date = $filter('date')(addSchedule.date);
+    addSchedules.newSchedule.date = $filter('date')(newSchedule.date);
 
     // Reject characters other than lowercase a-g from first period input
-    var period = addSchedule.firstPeriod || "";
-    $scope.addSchedule.firstPeriod = period.replace(/[^a-g]+/g, '');
+    var period = newSchedule.firstPeriod || "";
+    addSchedules.newSchedule.firstPeriod = period.replace(/[^a-g]+/g, '');
 
     // Make schedule
-    $scope.schedule = ScheduleFactory.make(addSchedule);
+    addSchedules.schedule = ScheduleFactory.make(newSchedule);
   });
 
-  $scope.submit = function () {
+  addSchedules.submit = function () {
 
-    $scope.loading = true;
+    addSchedules.loading = true;
 
-    DatabaseFactory.schedule.insert($scope.schedule, $scope.schedule.date).then(function (response) {
+    DatabaseFactory.schedule.insert(addSchedules.schedule, addSchedules.schedule.date).then(function (response) {
       console.log(response);
-      $scope.loading = false;
+      addSchedules.loading = false;
     });
 
     // Reset values
-    $scope.addSchedule = {};
-    $scope.addSchedule.dayType = "normal";
+    addSchedules.newSchedule = {};
+    addSchedules.newSchedule.dayType = "normal";
 
     // Focus date input
     document.getElementById('date-input').focus();

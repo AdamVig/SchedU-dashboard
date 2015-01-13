@@ -41,7 +41,7 @@
   <script src="/js/services/ScheduleFactory.js"></script>
   <!-- endinject -->
 </head>
-<body ng-controller="DashboardController">
+<body ng-controller="DashboardController as main">
   <header class="fit center py4">
     <img src="img/logo-white.svg">
   </header>
@@ -49,13 +49,13 @@
   <main ng-hide="AILoading">
     <div class="container clearfix">
       <div class="col-12 center">
-        <h1 class="caps" ng-class="{red: !scheduleString}">
-          <span ng-hide="scheduleString">No</span>
+        <h1 class="caps" ng-class="{red: !main.scheduleString}">
+          <span ng-hide="main.scheduleString">No</span>
           Schedule
         </h1>
-        <h2 ng-show="scheduleString">{{scheduleString}}</h2>
+        <h2 ng-show="main.scheduleString">{{scheduleString}}</h2>
         <ol class="list-reset ml4 mx-auto">
-          <period-block ng-repeat="period in scheduleObject.periodOrder" period="period"></period-block>
+          <period-block ng-repeat="period in main.scheduleObject.periodOrder" period="period"></period-block>
         </ol>
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6 px2 center">
@@ -74,25 +74,25 @@
       </div>
     </div>
     <div class="container clearfix"
-         ng-show="globals.addScheduleOn"
-         ng-init="globals.addScheduleOn = false">
+         ng-show="main.globals.addScheduleOn"
+         ng-init="main.globals.addScheduleOn = false">
       <ng-include src="'html/_add-schedule.html'"></ng-include>
     </div>
-    <div class="container clearfix" ng-controller="ScheduleController">
+    <div class="container clearfix" ng-controller="ScheduleController as schedules">
       <div class="sm-col sm-col-12 md-col-6 lg-col-6">
         <h1 class="inline-block">Schedules</h1>
         <button class="button button-green-outline inline-block ml4"
-                ng-class="{'is-active': globals.addScheduleOn}"
-                ng-click="globals.addScheduleOn = !globals.addScheduleOn">
+                ng-class="{'is-active': main.globals.addScheduleOn}"
+                ng-click="main.globals.addScheduleOn = !main.globals.addScheduleOn">
           Add Schedule
         </button>
         <br>
         <ul class="panel list-reset mr2">
           <li class="doc button block"
-              ng-repeat="schedule in allSchedules"
-              ng-init="$parent.currentScheduleId = allSchedules[0]._id"
-              ng-class="{'is-selected': $parent.currentScheduleId == schedule._id}"
-              ng-click="$parent.currentScheduleId = schedule._id">
+              ng-repeat="schedule in main.allSchedules"
+              ng-init="schedules.currentScheduleId = main.allSchedules[0]._id"
+              ng-class="{'is-selected': schedules.currentScheduleId == schedule._id}"
+              ng-click="schedules.currentScheduleId = schedule._id">
             {{schedule._id}}
             <span ng-show="schedule.special">: {{schedule.special}}</span>
           </li>
@@ -100,44 +100,44 @@
       </div>
       <div class="sm-col sm-col-12 md-col-6 lg-col-6">
         <h1>Selected Day</h1>
-        <pre class="panel json-display">{{currentSchedule | json}}</pre>
+        <pre class="panel json-display">{{schedules.currentSchedule | json}}</pre>
       </div>
     </div>
-    <div class="container clearfix" ng-controller="UserController">
+    <div class="container clearfix" ng-controller="UserController as users">
       <div class="sm-col sm-col-6 md-col-6 lg-col-6">
         <h1>Users</h1>
         <ul class="panel list-reset mr2">
           <li class="doc button block"
-              ng-repeat="user in allUsers | orderBy:'firstName'"
-              ng-init="$parent.currentUserId = '508-688-4042'"
-              ng-class="{'is-selected': $parent.currentUserId == user._id}"
-              ng-click="$parent.currentUserId = user._id">
+              ng-repeat="user in main.allUsers | orderBy:'firstName'"
+              ng-init="users.currentUserId = '508-688-4042'"
+              ng-class="{'is-selected': users.currentUserId == user._id}"
+              ng-click="users.currentUserId = user._id">
               {{user.firstName}} {{user.lastName}}
           </li>
         </ul>
       </div>
       <div class="sm-col sm-col-6 md-col-6 lg-col-6">
         <h1>Selected User</h1>
-        <pre class="panel json-display">{{currentUser | json}}</pre>
+        <pre class="panel json-display">{{users.currentUser | json}}</pre>
       </div>
     </div>
-    <div class="container clearfix" ng-controller="VersionsController">
+    <div class="container clearfix" ng-controller="VersionController as versions">
       <div class="sm-col sm-col-6 md-col-6 lg-col-6">
         <h1>Versions</h1>
         <ul class="panel list-reset mr2">
           <li class="doc button block"
-              ng-repeat="version in versions"
-              ng-init="$parent.currentVersionNumber = versions[0].versionNumber"
-              ng-class="{'is-selected': $parent.currentVersionNumber == version.versionNumber}"
-              ng-click="$parent.currentVersionNumber = version.versionNumber">
+              ng-repeat="version in main.allVersions"
+              ng-init="versions.currentVersionNumber = main.allVersions[0].versionNumber"
+              ng-class="{'is-selected': versions.currentVersionNumber == version.versionNumber}"
+              ng-click="versions.currentVersionNumber = version.versionNumber">
               {{version.versionNumber}}
           </li>
           <li class="doc block">
-            <form ng-submit="addVersion()">
+            <form ng-submit="versions.addVersion()">
               <input class="field-light ml1"
                      type="text"
                      placeholder="New Version Number"
-                     ng-model="newVersionNumber">
+                     ng-model="versions.newVersionNumber">
               <submit-button text="Add version" classes=""></submit-button>
             </form>
           </li>

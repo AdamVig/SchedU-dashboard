@@ -1,28 +1,28 @@
 <form class="sm-col sm-col-12 md-col-6 lg-col-6 px2"
-      ng-submit="submit()"
-      ng-controller="EditVersionController">
+      ng-submit="editVersions.submit()"
+      ng-controller="EditVersionController as editVersions">
   <h1>Version Tracker</h1>
   <label for="versionNumber">Version Number</label>
   <input class="block full-width field-light"
          type="text"
          id="versionNumber"
-         ng-model="currentVersion.versionNumber">
+         ng-model="versions.currentVersion.versionNumber">
   <label for="date">Date</label>
   <input class="block full-width field-light"
          type="text"
          id="date"
-         ng-model="currentVersion.date">
+         ng-model="versions.currentVersion.date">
   <div class="version-changes-list">
     <input class="block full-width field-light"
            type="text"
            id="change-{{$index + 1}}"
-           ng-model="currentVersion.changes[$index].value"
-           ng-repeat="change in currentVersion.changes">
+           ng-model="versions.currentVersion.changes[$index].value"
+           ng-repeat="change in versions.currentVersion.changes">
   </div>
   <label for="newChange">New Change</label>
   <input class="block full-width field-light"
          type="text"
          id="newChange"
-         ng-model="newChange">
+         ng-model="editVersions.newChange">
   <submit-button text="Update version" classes="full-width"></submit-button>
 </form>
