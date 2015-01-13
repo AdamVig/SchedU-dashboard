@@ -23,7 +23,8 @@ dashboard.directive("periodBlock", [function () {
     restrict: 'E', // Can only be called by element name
     scope: {
       text: '@text',
-      classes: '@classes'
+      classes: '@classes',
+      loading: '='
     },
     replace: true,
     templateUrl: 'html/_submit-button.html'

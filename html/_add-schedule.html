@@ -50,7 +50,7 @@
              ng-repeat="num in [1,2,3,4,5,6,7,8]"
              ng-model="addSchedules.newSchedule.periods[num]">
     </div>
-    <submit-button text="Add schedule" classes="full-width"></submit-button>
+    <submit-button text="Add schedule" classes="full-width" loading="addSchedules.loading"></submit-button>
   </form>
   <div class="sm-col sm-col-12 md-col-6 lg-col-6" ng-show="addSchedules.lastSchedule">
     <h1>Schedule Preview</h1>
