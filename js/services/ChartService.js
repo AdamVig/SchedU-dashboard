@@ -109,9 +109,13 @@ services.service('ChartService', [function() {
 
     allUsers.map(function(user) {
       if (user.usage) {
-        _.findWhere(data, {
-          'label': user.usage.platform.name
-        }).value++;
+        try {
+          _.findWhere(data, {
+            'label': user.usage.platform.name
+          }).value++;
+        } catch (e) {
+          console.error("Platform not supported:", user.usage.platform.name);
+        }
       }
     });
 
