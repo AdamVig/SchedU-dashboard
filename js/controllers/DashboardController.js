@@ -24,13 +24,14 @@ controllers.controller("DashboardController", ['$filter', '$activityIndicator', 
     main.scheduleString = ParseService.parseSchedule(main.scheduleObject);
 
     return DatabaseFactory.user.getAll();
+  }).catch(function (e) {
+    console.log("Error getting all schedules:", e);
 
   // Get all users and create user charts
   }).then(function (response) {
 
     main.allUsers = DataService.extractDocs(response);
     main.userCount = ParseService.countUsers(main.allUsers);
-
     main.charts.userGrades = ChartService.chartGrades(main.userCount);
     main.charts.userPlatforms = ChartService.chartPlatforms(main.allUsers);
     main.charts.userLoginsData = ChartService.chartLogins(main.allUsers);
@@ -46,6 +47,9 @@ controllers.controller("DashboardController", ['$filter', '$activityIndicator', 
 
     return DatabaseFactory.feedback.getAll();
 
+  }).catch(function (e) {
+    console.log("Error getting all users:", e);
+
     // Get all feedback items and create feedback items chart
   }).then(function (response) {
 
@@ -56,11 +60,18 @@ controllers.controller("DashboardController", ['$filter', '$activityIndicator', 
 
     return DatabaseFactory.versions.getAll();
 
+
+  }).catch(function (e) {
+    console.log("Error getting all feedback:", e);
+
     // Get all versions and latest version
   }).then(function (response) {
 
     main.allVersions = $filter('orderBy')(DataService.extractDocs(response), 'versionNumber', 'reverse');
     main.currentVersion = main.allVersions[0];
+
+  }).catch(function (e) {
+    console.log("Error getting all versions:", e);
 
   }).finally(function (response) {
 
