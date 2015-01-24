@@ -1,6 +1,4 @@
-constants.constant("dbUrl", "https://orgalaskelldintystarlinu:akEwnCIxXqksQdC8CqsyiSR2@schedu.cloudant.com/")
-
-.constant("dayLetterColors", {
+constants.constant("dayLetterColors", {
   "A": "#D362E8",
   "B": "#2ecc71",
   "C": "#e67e22",
@@ -13,4 +11,10 @@ constants.constant("dbUrl", "https://orgalaskelldintystarlinu:akEwnCIxXqksQdC8Cq
 
 .constant("dismissal", moment().hour(14).minute(20).second(0))
 
-.constant("dayLetters", ["a", "b", "c", "d", "e", "f", "g"]);
+.constant("dayLetters", ["a", "b", "c", "d", "e", "f", "g"])
+
+.constant("DatabaseConstant", {
+  "url": "https://schedu.cloudant.com/",
+  "username": "orgalaskelldintystarlinu",
+  "password": "akEwnCIxXqksQdC8CqsyiSR2"
+});
