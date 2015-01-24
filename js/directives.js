@@ -27,6 +27,16 @@ dashboard.directive("periodBlock", [function () {
       loading: '='
     },
     replace: true,
-    templateUrl: 'html/_submit-button.html'
+    template:
+    '<button type="submit"' +
+      'class="button button-green-outline {{classes}}"' +
+      'ng-disabled="loading">' +
+      '<div class="button-loader"' +
+        'ng-show="loading"' +
+        'ng-activity-indicator="DottedWhite"' +
+        'skip-ng-show="yes">' +
+      '</div>' +
+      '<span ng-show="!loading">{{text}}</span>' +
+    '</button>'
   };
 }]);
