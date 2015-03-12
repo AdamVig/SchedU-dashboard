@@ -1,0 +1,22 @@
+{
+  "name": "schedu-dashboard",
+  "version": "1.0.0",
+  "description": "SchedU Dashboard",
+  "author": "Adam Vigneaux <adamvigneaux@gmail.com>",
+  "dependencies": {
+    "gulp": "*",
+    "gulp-concat": "^2.5.0",
+    "gulp-connect": "*",
+    "gulp-filter": "^2.0.1",
+    "gulp-inject": "^1.1.1",
+    "gulp-minify-css": "^0.4.5",
+    "gulp-open": "*",
+    "gulp-order": "*",
+    "gulp-print": "*",
+    "gulp-sass": "*",
+    "gulp-uglify": "^1.1.0",
+    "gulp-watch": "^4.1.1",
+    "main-bower-files": "^2.5.0",
+    "stream-series": "*"
+  }
+}
