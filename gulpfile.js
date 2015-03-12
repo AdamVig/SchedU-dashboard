@@ -58,7 +58,7 @@ gulp.task('css-lib', function () {
 });
 
 gulp.task('inject-css', function () {
-  var sources = gulp.src(['!css/lib.css', 'css/*.css', 'lib/css/*.css'], {read: false})
+  var sources = gulp.src(['!css/lib.css', 'css/*.css', 'lib/css/*.css'], {read: false});
   return gulp.src('index.html')
     .pipe(inject(sources))
     .pipe(gulp.dest('./'));
@@ -85,12 +85,14 @@ gulp.task('inject-minified', function () {
 gulp.task('serve', ['sass', 'dev-mode'], function () {
 
   connect.server({
-    livereload: true
+    livereload: true,
+    host: 'local.dev',
+    port: 8100
   });
 
   gulp.src('index.html')
     .pipe(open('', {
-      url: 'http://localhost:8080/',
+      url: 'http://local.dev:8100/',
       app: 'Google Chrome'
     }));
 
