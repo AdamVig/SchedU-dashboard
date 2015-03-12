@@ -16,7 +16,7 @@ controllers.controller("DashboardController", ['$filter', '$activityIndicator', 
     main.allSchedules = $filter('orderBy')(
       DataService.extractDocs(response),
       function (schedule) {
-        return moment(schedule._id, 'MM-DD-YY').format('X')
+        return moment(schedule._id, 'MM-DD-YY').format('X');
       },
       true
     );
@@ -55,7 +55,7 @@ controllers.controller("DashboardController", ['$filter', '$activityIndicator', 
 
     main.feedbackItemsList = DataService.extractDocs(response);
     main.feedbackItems = ParseService.countFeedback(main.allUsers, main.feedbackItemsList);
-    main.feedbackItems = $filter('orderBy')(_.toArray(main.feedbackItems), 'votes', 'reverse');;
+    main.feedbackItems = $filter('orderBy')(_.toArray(main.feedbackItems), 'votes', 'reverse');
     main.charts.feedbackItems = ChartService.chartFeedback(main.feedbackItems);
 
     return DatabaseFactory.versions.getAll();
